@@ -1,1 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather Station1</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap" rel="stylesheet">
+</head>
+
+
+<body>
+    <nav>
+        <h2>Weather Station1</h2>
+        <div class="search-box">
+            <input type="text" placeholder="輸入縣市" />
+            <button>Search</button>
+        </div>
+    </nav>
+    <main>
+        <div class="app-container">
+            <header>
+                <h1>台北市</h1>
+            </header>
+            <div>
+                <section class="current-weather">
+                    <h2 id="date">日期</h2>
+                    <div class="weather-details">
+                        <img src="./assets/icons/cloudy night.svg" alt="Weather Icon" />
+                        <div>
+                            <p class="temperature">25°C</p>
+                            <p class="description">晴天</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="forecast">
+                    <h3>未來五日預測</h3>
+                    <div class="forecast-cards">
+                        <!-- Forecast cards will go here -->
+                        <div class="card">
+                            <p>Mon</p>
+                            <img src="./assets/icons/cloudy sun.svg" alt="Weather Icon" />
+                            <p>22°C</p>
+                        </div>
+                        <div class="card">
+                            <p>Mon</p>
+                            <img src="./assets/icons/cloudy sun.svg" alt="Weather Icon" />
+                            <p>22°C</p>
+                        </div>
+                        <div class="card">
+                            <p>Mon</p>
+                            <img src="./assets/icons/cloudy sun.svg" alt="Weather Icon" />
+                            <p>22°C</p>
+                        </div>
+                        <div class="card">
+                            <p>Mon</p>
+                            <img src="./assets/icons/cloudy sun.svg" alt="Weather Icon" />
+                            <p>22°C</p>
+                        </div>
+                        <div class="card">
+                            <p>Mon</p>
+                            <img src="./assets/icons/cloudy sun.svg" alt="Weather Icon" />
+                            <p>22°C</p>
+                        </div>
+                        <!-- Repeat for other days -->
+                    </div>
+                </section>
+            </div>
+        </div>
+        <div class="app-container">
+            <header>
+                <h1>現在時間</h1>
+            </header>
+            <div>
+                <section class="current-time">
+                    <h2 id="time-now"></h2>
+                    <h2>晴時多雲偶陣雨</h2><img src="./assets/icons/cloudy sun.svg" width="50px" height="50px">
+                </section>
+                <section class="rain-forecast">
+                    <h2>雨量</h2>
+                    <div class="rain-cards">
+                        
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+</body>
+<script src="scripts.js"></script>
+
+</html>
