@@ -1,0 +1,234 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Noto Sans TC", sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* 頁面標題 */
+.weather-title {
+    margin-top: 40px;
+    font-size: 36px;
+    font-weight: bold;
+    text-align: center;
+    color: transparent;
+    background: linear-gradient(270deg, #4facfe, #0568b8, #2e75b6, #4facfe);
+    background-size: 600% 600%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    animation: titleGradientFlow 8s ease infinite;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+
+/* Navbar 設定 */
+
+.navbar {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 30px;
+}
+
+/* 按鈕統一深藍漸層 + 呼吸動畫 */
+.navbar button {
+    border: none;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(270deg, #2e75b6, #4a90e2, #2e75b6);
+    background-size: 400% 400%;
+    animation: breathingButton 6s ease-in-out infinite;
+    cursor: pointer;
+    transition: transform 0.3s, filter 0.3s;
+}
+
+/* 滑鼠 hover 微微放大 */
+.navbar button:hover {
+    transform: scale(1.05);
+}
+
+/* 按下去微微變暗 */
+.navbar button:active {
+    filter: brightness(0.85);
+}
+
+
+
+/* 流動漸層動畫 */
+@keyframes titleGradientFlow {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* 按鈕呼吸動畫 */
+@keyframes breathingButton {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* 右下角雲朵查詢按鈕 */
+.weather-float-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(90deg, #4facfe, #2e75b6);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+/* 浮動查詢按鈕區塊 */
+.weather-float-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(90deg, hsl(220, 85%, 63%), #6badff);
+    /* 藍色漸層 */
+    border-radius: 50%;
+    box-shadow: 0 0 15px rgba(55, 157, 246, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 1000;
+    overflow: visible;
+    animation: floatGlow 4s ease-in-out infinite;
+    /* 呼吸動畫 */
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+/* 按鈕裡的圖示 */
+.weather-icon {
+    width: 50%;
+    height: 50%;
+    object-fit: contain;
+    pointer-events: none;
+    fill: white;
+}
+
+/* 隱藏的提示文字 */
+.weather-text {
+    position: absolute;
+    bottom: 90px;
+    right: 10px;
+    background-color: #4a90e2;
+    color: #ffffff;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+/* hover 顯示提示文字，按鈕稍微放大 */
+.weather-float-btn:hover .weather-text {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.weather-float-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 25px rgba(85, 85, 255, 0.7);
+}
+
+/* 呼吸發光動畫 */
+@keyframes floatGlow {
+
+    0%,
+    100% {
+        box-shadow: 0 0 15px rgba(7, 139, 255, 0.5);
+    }
+
+    50% {
+        box-shadow: 0 0 30px rgba(84, 138, 255, 0.7);
+    }
+}
+
+
+
+
+/* 地圖外框 */
+.map-container svg path {
+    fill: #a5c9ea;
+    /* 柔和淡藍 */
+    stroke: #ffffff;
+    /* 白色邊線 */
+    stroke-width: 0.5;
+    transition: fill 0.3s, transform 0.3s, filter 0.3s;
+}
+
+.map-container {
+    margin-top: 40px;
+    width: 80%;
+    max-width: 800px;
+}
+
+/* 讓 SVG 地圖滿版且置中 */
+.map-container svg {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* 滑鼠 hover 變亮、微微放大、有一點陰影 */
+.map-container svg path:hover {
+    fill: #5b9bd5;
+    transform: scale(1.001);
+    /* 放大3% */
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    cursor: pointer;
+}
+
+/* 點擊 active 狀態：更深藍 */
+.map-container svg path:active {
+    fill: #2e75b6;
+    /* 按下去時的深藍色 */
+}
+
+/* Footer */
+footer {
+    width: 100%;
+    background-color: #2e75b6;
+    color: #FFFFFF;
+    text-align: center;
+    padding: 40px 0px;
+    font-size: 16px;
+    margin-top: auto;
+}
