@@ -13,16 +13,23 @@
     <h1 class="weather-title">Taiwan Weather Information Website</h1>
     <!-- 導覽列 -->
     <nav class="navbar">
-        <button onclick="location.href='forecast.html'">氣象預報</button>
-        <button onclick="location.href='observation.html'">天氣觀測</button>
-        <button onclick="location.href='earthquake.html'">地震海嘯</button>
-        <button onclick="location.href='climate.html'">氣候</button>
-        <button onclick="location.href='warning.html'">天氣警特報</button>
-        <button onclick="location.href='model.html'">數值預報</button>
-        <button onclick="location.href='astronomy.html'">天文</button>
+        <div class="burger" id="burger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <div class="navbar-menu" id="navbarMenu">
+            <button onclick="location.href='forecast.html'">氣象預報</button>
+            <button onclick="location.href='observation.html'">天氣觀測</button>
+            <button onclick="location.href='earthquake.html'">地震海嘯</button>
+            <button onclick="location.href='climate.html'">氣候</button>
+            <button onclick="location.href='warning.html'">天氣警特報</button>
+            <button onclick="location.href='model.html'">數值預報</button>
+            <button onclick="location.href='astronomy.html'">天文</button>
+        </div>
     </nav>
-
-
+    <!-- 台灣地圖 SVG -->
     <div class="map-container">
         <!-- tw.svg 內容 -->
         <svg baseprofile="tiny" fill="#6f9c76" height="1000" stroke="#ffffff" stroke-linecap="round"

@@ -33,6 +33,23 @@ document.querySelectorAll('svg path').forEach(area => {
     });
 });
 
+// burger button 
+const burger = document.getElementById('burger');
+const navbarMenu = document.getElementById('navbarMenu');
+
+burger.addEventListener('click', () => {
+    burger.classList.toggle('active');
+    navbarMenu.classList.toggle('active');
+});
+
+// 如果點擊選單按鈕想要自動收回
+navbarMenu.querySelectorAll('button').forEach(button => {
+    button.addEventListener('click', () => {
+        navbarMenu.classList.remove('active');
+        burger.classList.remove('active');
+    });
+});
+
 
 
 
