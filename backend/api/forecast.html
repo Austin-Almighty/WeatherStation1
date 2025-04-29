@@ -9,11 +9,13 @@
 
 <body>
   <script>
-    let ID = "F-C0032-001";
     let KEY = "CWA-A67F62A2-EBCB-41D7-B9F6-59F2310F45FB";
-    let URL = `https://opendata.cwa.gov.tw/api/v1/rest/datastore/${ID}?Authorization=${KEY}`;
+
+
     getFore();
     async function getFore() {
+      let ID = "F-C0032-001";
+      let URL = `https://opendata.cwa.gov.tw/api/v1/rest/datastore/${ID}?Authorization=${KEY}`;
       let res = await fetch(URL);
       let resData = await res.json();
       let records = resData.records;
@@ -46,7 +48,7 @@
         let copy = JSON.parse(tmp);
         result[name] = copy;
       }
-      console.log(result);
+      return result;
     }
   </script>
 </body>
