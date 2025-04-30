@@ -35,26 +35,30 @@
                             <p id="today-overview"></p>
                         </div>
                     </div>
+                    <div class="precipitation">
+                        <h3>濕度：<span class="humidity"></span>%</h3>
+                        <h3>雨量：<span class="rainfall"></span>mm</h3>
+                    </div>
                 </section>
                 <section class="today-forecast">
-                    <h1>今日氣象預測</h1>
+                    <h1>氣象預測</h1>
                     <div class="today-cards">
                         <div class="today-card">
-                            <h4>今日白天</h4>
+                            <h4 class="forecast-time">今日白天</h4>
                             <img src="./assets/icons/sunny day.svg" alt="weather icon" class="today-img">
                             <p class="temp"></p>
                             <p>降雨機率：<span class="rain"></span>%</p>
                             <p class="feel"></p>
                         </div>
                         <div class="today-card">
-                            <h4>今晚明晨</h4>
+                            <h4 class="forecast-time">今晚明晨</h4>
                             <img src="./assets/icons/sunny day.svg" alt="weather icon" class="today-img">
                             <p class="temp"></p>
                             <p>降雨機率：<span class="rain"></span>%</p>
                             <p class="feel"></p>
                         </div>
                         <div class="today-card">
-                            <h4>明日白天</h4>
+                            <h4 class="forecast-time">明日白天</h4>
                             <img src="./assets/icons/sunny day.svg" alt="weather icon" class="today-img">
                             <p class="temp"></p>
                             <p>降雨機率：<span class="rain"></span>%</p>
@@ -104,14 +108,17 @@
 
             <div class="app-container">
                 <div>
-                    <section class="rain-forecast">
-                        <h2>雨量</h2>
-                        <div class="rain-cards"></div>
+                    <section class="station">
+                        <h1>資料來源</h1>
+                        <h3><span id="stationName"></span>觀測站</h3>
+                        <img id="randomPhoto">
+                        <h6>資料更新時間：<span id="updateTime"></span></h6>
                     </section>
                 </div>
             </div>
         </div>
     </main>
+    
     <footer>
         <div>© 2025 台灣天氣資訊網站. 資料來源：中央氣象署公開資料. All rights reserved.</div>
     </footer>

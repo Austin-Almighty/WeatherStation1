@@ -3,43 +3,14 @@ let KEY = "CWA-A67F62A2-EBCB-41D7-B9F6-59F2310F45FB";
 const params = new URLSearchParams(window.location.search);
 const city = params.get("city");
 
+
+
 async function getForecast() {
-    let ID = "F-C0032-001";
-    let URL = `https://opendata.cwa.gov.tw/api/v1/rest/datastore/${ID}?Authorization=${KEY}&format=JSON`;
-    let res = await fetch(URL);
-    let resData = await res.json();
-    let records = resData.records;
-    let locations = records.location;
-    let result = {}
-    for (let i = 0; i < locations.length; i++) {
-      let name = locations[i].locationName;
-      let weather = locations[i].weatherElement;
-      let forecast = {};
-      let interval = [];
-      for (let j = 0; j < weather.length; j++) {
-        let element = weather[j].elementName;
-        let time = weather[j].time;
-        let param = [];
-        for (let k = 0; k < time.length; k++) {
-          interval[k] = time[k].startTime.slice(5, 16) + " ~ " + time[k].endTime.slice(5, 16);
-          param[k] = time[k].parameter.parameterName;
-        }
-        forecast[element] = param;
-      }
-      forecast.Intv = interval;
-      forecast.Temp = [
-        forecast.MinT[0] + " ~ " + forecast.MaxT[0],
-        forecast.MinT[1] + " ~ " + forecast.MaxT[1],
-        forecast.MinT[2] + " ~ " + forecast.MaxT[2]
-      ]
-      delete forecast.MinT;
-      delete forecast.MaxT;
-      let tmp = JSON.stringify(forecast);
-      let copy = JSON.parse(tmp);
-      result[name] = copy;
-    }
-    return result;
-  }
+  let response = await fetch("http://54.66.212.32:8000/forecast")
+  let result = await response.json();
+  return result;
+}
+
 
 
 async function renderInfo(city) {
@@ -49,8 +20,6 @@ async function renderInfo(city) {
         div.textContent = city;
     });
     let weatherInfo = result[city];
-    console.log(weatherInfo)
-    
     let overview = weatherInfo.Wx;
    
     const today_card_image = document.querySelectorAll(".today-img");
@@ -63,7 +32,7 @@ async function renderInfo(city) {
                 img.src="./assets/icons/cloudy sun.svg"
                 break;
             case "多雲短暫陣雨":
-                img.src="./assets/icons/showers.svg"
+                img.src="./assets/icons/shower.svg"
                 break;
             case "陰短暫陣雨":
                 img.src="./assets/icons/umbrella.svg"
@@ -77,6 +46,17 @@ async function renderInfo(city) {
         }
     })
     
+    let timeframe = weatherInfo.Intv;
+    const intervalElements = document.querySelectorAll(".forecast-time");
+    timeframe.forEach((frame, i) => {
+      const startTime = frame.slice(6, 11); // e.g., "00:00"
+      const endTime = frame.slice(-5); // e.g., "06:00"
+      const timeInterval = `${startTime}~${endTime}`;
+
+      if (intervalElements[i]) {
+        intervalElements[i].textContent = timeInterval;
+      }
+    });
 
     let rain_probability = weatherInfo.PoP;
     const rain_div = document.querySelectorAll(".rain");
@@ -103,10 +83,8 @@ async function renderInfo(city) {
 
     let today = await getCurrent(city);
     const today_weather = document.getElementById('today-overview');
-
     today_weather.textContent = today[0];
     const today_temp = document.getElementById("today-temperature");
-
     today_temp.textContent = today[1];
 
 }
@@ -115,27 +93,43 @@ async function renderInfo(city) {
 
 
 
-async function getRainCounty() {
-    let ID = "O-A0002-001";
-    let StationName = ["基隆", "臺北", "新北", "桃園", "新竹市東區", "新竹", "苗栗", "臺中", "田中", "日月潭", "古坑", "嘉義", "民雄", "臺南", "高雄", "屏東", "宜蘭", "花蓮", "臺東", "澎湖", "金門", "馬祖"];
-    let URL = `https://opendata.cwa.gov.tw/api/v1/rest/datastore/${ID}?Authorization=${KEY}&StationName=${StationName}`;
-    let res = await fetch(URL);
-    let resData = await res.json();
-    let records = resData.records;
-    let stations = records.Station;
-    let result = {};
-    for (let i = 0; i < stations.length; i++) {
-      let geoInfo = stations[i].GeoInfo;
-      let county = geoInfo.CountyName;
-      let town = geoInfo.TownName;
-      let name = stations[i].StationName;
-      let rain = stations[i].RainfallElement.Now.Precipitation;
-      if (stations[i].Maintainer == "中央氣象署") {
-        result[county] = { rain: rain };
-      }
-    }
-    return result;
-  }
+async function getRainCounty(city) {
+  let response = await fetch("http://54.66.212.32:8000/obs-county");
+  let result = await response.json();
+  console.log(result);
+  let display_info = result[city];
+  console.log(display_info);
+  let humidity = display_info.humidity;
+  let rain = display_info.rain;
+  const humidityElements = document.querySelector(".humidity");
+  humidityElements.textContent = humidity;
+  const rainfallElements = document.querySelector(".rainfall");
+  rainfallElements.textContent = rain;
+  let station = display_info.name;
+  const stationName = document.getElementById("stationName");
+  stationName.textContent = station;
+  const time = display_info.time;
+  const updateTime = document.getElementById("updateTime");
+  updateTime.textContent = time;
+  const randomPhoto = document.getElementById("randomPhoto");
+  const list = [
+    "./assets/img/cloudy afternoon.jpg",
+    "./assets/img/cloudy day.jpg",
+    "./assets/img/fog.jpg",
+    "./assets/img/ivan-ulamec-F-kdP4Hk7lg-unsplash.jpg",
+    "./assets/img/rain windown.jpg",
+    "./assets/img/rain.jpg",
+    "./assets/img/rainy night.jpg",
+    "./assets/img/sun glasses.jpg",
+    "./assets/img/sunny day.jpg",
+    "./assets/img/sunny with cloud overcast.jpg",
+    "./assets/img/thunder.jpg",
+  ];
+  const randomIndex = Math.floor(Math.random() * list.length);
+  const selectedImage = list[randomIndex];
+  randomPhoto.src = selectedImage;
+}
+
 
 
   
@@ -227,12 +221,11 @@ async function getCurrent(city) {
     let resData = await res.json();
     let weather = resData.records.Station[0].WeatherElement.Weather;
     let temp = resData.records.Station[0].WeatherElement.AirTemperature;
-    console.log([weather, temp])
     return [weather, temp]
   }
   
-  getCurrent("臺南市");
 
-renderInfo("臺南市");
 
+renderInfo("新北市")
+getRainCounty("新北市")
 

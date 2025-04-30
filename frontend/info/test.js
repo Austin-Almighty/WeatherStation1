@@ -38,4 +38,30 @@ async function test(callback) {
     console.log(test)
 }
 
-test(getObsCounty);
+
+
+async function getRainCounty() {
+    let ID = "O-A0002-001";
+    let StationName = ["基隆", "臺北", "新北", "桃園", "新竹市東區", "新竹", "苗栗", "臺中", "田中", "日月潭", "古坑", "嘉義", "民雄", "臺南", "高雄", "屏東", "宜蘭", "花蓮", "臺東", "澎湖", "金門", "馬祖"];
+    let URL = `https://opendata.cwa.gov.tw/api/v1/rest/datastore/${ID}?Authorization=${KEY}&StationName=${StationName}`;
+    let res = await fetch(URL);
+    let resData = await res.json();
+    let records = resData.records;
+    let stations = records.Station;
+    let result = {};
+    for (let i = 0; i < stations.length; i++) {
+      let geoInfo = stations[i].GeoInfo;
+      let county = geoInfo.CountyName;
+      let town = geoInfo.TownName;
+      let name = stations[i].StationName;
+      let rain = stations[i].RainfallElement.Now.Precipitation;
+      if (stations[i].Maintainer == "中央氣象署") {
+        result[county] = { rain: rain };
+      }
+    }
+    console.log(result)
+    return result;
+  }
+
+
+getRainCounty();
