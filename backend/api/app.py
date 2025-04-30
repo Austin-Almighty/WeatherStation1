@@ -16,22 +16,24 @@ async def get_raining(response:Response):
   res = requests.get(URL)
   resData = res.json()
   records = resData["records"]
-  locations = records["location"];
+  locations = records["location"]
   result = {}
-  for i in range(len(locations)):
-    name = locations[i]["locationName"]
-    weathers = locations[i]["weatherElement"]
+  for location in locations:
+    name = location["locationName"]
+    weathers = location["weatherElement"]
     forecast = {}
     interval = []
-    for j in range(len(weathers)):
-      element = weathers[j]["elementName"]
-      time = weathers[j]["time"]
-      param = []
-      for k in range(len(time)):
+    for weather in weathers:
+      elemt = weather["elementName"]
+      times = weather["time"]
+      meter = []
+      for time in times:
         if len(interval) < 3:
-          interval.append(time[k]["startTime"][5:16] + " ~ " + time[k]["endTime"][5:16])
-        param.append(time[k]["parameter"]["parameterName"])
-      forecast[element] = param
+          start = time["startTime"][5:16]
+          end = time["endTime"][5:16]
+          interval.append(start + " ~ " + end)
+        meter.append(time["parameter"]["parameterName"])
+      forecast[elemt] = meter
     forecast["Intv"] = interval
     forecast["Temp"] = [
       forecast["MinT"][0] + " ~ " + forecast["MaxT"][0],
@@ -67,15 +69,15 @@ async def get_obs_county(response:Response):
       "weather": -99,
       "rain": -99,
     }
-  for i in range(len(stations)):
-    county = stations[i]["GeoInfo"]["CountyName"]
-    name = stations[i]["StationName"]
+  for station in stations:
+    county = station["GeoInfo"]["CountyName"]
+    name = station["StationName"]
     result[county]["name"] = name
-    result[county]["time"] = stations[i]["ObsTime"]["DateTime"][5:16]
-    result[county]["temp"] = stations[i]["WeatherElement"]["AirTemperature"]
-    result[county]["humidity"] = stations[i]["WeatherElement"]["RelativeHumidity"]
-    result[county]["weather"] = stations[i]["WeatherElement"]["Weather"]
-    result[county]["rain"] = stations[i]["WeatherElement"]["Now"]["Precipitation"]
+    result[county]["time"] = station["ObsTime"]["DateTime"][5:16]
+    result[county]["temp"] = station["WeatherElement"]["AirTemperature"]
+    result[county]["humidity"] = station["WeatherElement"]["RelativeHumidity"]
+    result[county]["weather"] = station["WeatherElement"]["Weather"]
+    result[county]["rain"] = station["WeatherElement"]["Now"]["Precipitation"]
   return result
 
 
@@ -93,15 +95,15 @@ async def get_obs_town(response:Response, q:str|None=None):
   CountyName = ['基隆市', '臺北市', '新北市', '桃園市', '新竹市', '新竹縣', '苗栗縣', '臺中市', '彰化縣', '南投縣', '雲林縣', '嘉義市', '嘉義縣', '臺南市', '高雄市', '屏東縣', '宜蘭縣', '花蓮縣', '臺東縣', '澎湖縣', '金門縣', '連江縣']
   for county in CountyName:
     result[county] = {}
-  for i in range(len(stations)):
-    county = stations[i]["GeoInfo"]["CountyName"]
-    name = stations[i]["StationName"]
+  for station in stations:
+    county = station["GeoInfo"]["CountyName"]
+    name = station["StationName"]
     result[county][name] = {}
-    result[county][name]["time"] = stations[i]["ObsTime"]["DateTime"][5:16]
-    result[county][name]["temp"] = stations[i]["WeatherElement"]["AirTemperature"]
-    result[county][name]["humidity"] = stations[i]["WeatherElement"]["RelativeHumidity"]
-    result[county][name]["weather"] = stations[i]["WeatherElement"]["Weather"]
-    result[county][name]["rain"] = stations[i]["WeatherElement"]["Now"]["Precipitation"]
+    result[county][name]["time"] = station["ObsTime"]["DateTime"][5:16]
+    result[county][name]["temp"] = station["WeatherElement"]["AirTemperature"]
+    result[county][name]["humidity"] = station["WeatherElement"]["RelativeHumidity"]
+    result[county][name]["weather"] = station["WeatherElement"]["Weather"]
+    result[county][name]["rain"] = station["WeatherElement"]["Now"]["Precipitation"]
   if q in CountyName:
     return result[q]
   return result
