@@ -272,6 +272,45 @@ p {
     font-size: 16px;
 }
 
+.box-1, .box-2 {
+  animation: loading-move1 3000ms ease-in 1000ms;
+}
+
+.box-3 {
+  animation: loading-move2 3000ms ease-in 1000ms;
+}
+
+
+@keyframes loading-move1 {
+  0% {
+    transform: translateX(-200%) scale(0.8);
+    opacity: 0;
+  }
+  90% {
+    transform: translateX(0) scale(1.1);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+}
+@keyframes loading-move2 {
+  0% {
+    transform: translateX(200%) scale(0.8);
+    opacity: 0;
+  }
+  90% {
+    transform: translateX(0) scale(1.1);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+}
+
+
 
 
 

@@ -5,7 +5,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>台灣天氣資訊網站</title>
-    <link rel="stylesheet" href="/info/styles.css" />
+    <!-- <link rel="stylesheet" href="/info/styles.css" /> -->
+    <link rel="stylesheet" href="styles.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap" rel="stylesheet">
@@ -22,7 +23,7 @@
     </nav>
     <main>
         <div class="grid-container">
-            <div class="time-zone">
+            <div class="time-zone box-1">
                 <section class="current-weather">
                     <h1>現在時間</h1>
                     <h2 id="time-now"></h2>
@@ -45,21 +46,21 @@
                     <div class="today-cards">
                         <div class="today-card">
                             <h4 class="forecast-time">今日白天</h4>
-                            <img src="/info/assets/icons/sunny day.svg" alt="weather icon" class="today-img">
+                            <img src="/info/assets/icons/sun rise.svg" alt="weather icon" class="today-img">
                             <p class="temp"></p>
                             <p>降雨機率：<span class="rain"></span>%</p>
                             <p class="feel"></p>
                         </div>
                         <div class="today-card">
                             <h4 class="forecast-time">今晚明晨</h4>
-                            <img src="/info/assets/icons/sunny day.svg" alt="weather icon" class="today-img">
+                            <img src="/info/assets/icons/sun rise.svg" alt="weather icon" class="today-img">
                             <p class="temp"></p>
                             <p>降雨機率：<span class="rain"></span>%</p>
                             <p class="feel"></p>
                         </div>
                         <div class="today-card">
                             <h4 class="forecast-time">明日白天</h4>
-                            <img src="./assets/icons/sunny day.svg" alt="weather icon" class="today-img">
+                            <img src="./assets/icons/sun rise.svg" alt="weather icon" class="today-img">
                             <p class="temp"></p>
                             <p>降雨機率：<span class="rain"></span>%</p>
                             <p class="feel"></p>
@@ -68,7 +69,7 @@
                 </section>
             </div>
 
-            <div class="app-container">
+            <div class="app-container box-2">
                 <header>
                     <h1 class="city"></h1>
                 </header>
@@ -106,7 +107,7 @@
                 </div>
             </div>
 
-            <div class="app-container">
+            <div class="app-container box-3">
                 <div>
                     <section class="station">
                         <h1>資料來源</h1>
@@ -123,7 +124,9 @@
         <div>© 2025 台灣天氣資訊網站. 資料來源：中央氣象署公開資料. All rights reserved.</div>
     </footer>
 </body>
-<script src="/info/scripts.js"></script>
-<script src="/info/feature.js"></script>
+<!-- <script src="/info/scripts.js"></script>
+<script src="/info/feature.js"></script> -->
+<script src="scripts.js"></script>
+<script src="feature.js"></script>
 
 </html>
