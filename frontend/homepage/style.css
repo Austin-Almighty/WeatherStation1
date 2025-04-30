@@ -537,6 +537,13 @@ footer {
     font-weight: 600;
 }
 
+.update-time {
+    text-align: right;
+    font-size: 13px;
+    color: #a4a4a4;
+    margin-top: 8px;
+}
+
 /* Loading 動畫*/
 @keyframes fadeInUp {
     from {

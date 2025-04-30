@@ -137,6 +137,7 @@ async function searchWeather() {
         const res = await fetch("http://54.66.212.32:8000/obs-county");
         const data = await res.json();
         const info = data[city];
+        const updateTime = info.time.split("T")[1];
         const emoji = getWeatherEmoji(info.weather);
         if (info) {
             resultBox.innerHTML = `
@@ -145,6 +146,7 @@ async function searchWeather() {
             <p>氣溫：${info.temp}°C</p>
             <p>濕度：${info.humidity}％</p>
             <p>降雨率：${info.rain}％</p>
+            <p class="update-time">更新時間：${updateTime}</p>
           `;
             resultBox.classList.add("result-animate");
         } else {
