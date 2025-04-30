@@ -168,5 +168,16 @@ document.getElementById("closeSearchBox").addEventListener("click", () => {
     select.selectedIndex = 0;           // 重設選單為第一個選項
 });
 
+// 網頁載入後自動顯示地圖提示文字（如「滑動查看天氣資訊」）
+// 並於 3 秒後自動淡出
+window.addEventListener("load", () => {
+    const hint = document.getElementById("mapHint");
+    hint.classList.add("show");
+
+    // 3 秒後自動消失
+    setTimeout(() => {
+        hint.classList.remove("show");
+    }, 3000);
+});
 
 
