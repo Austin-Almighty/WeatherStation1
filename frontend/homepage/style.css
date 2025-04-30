@@ -2,7 +2,7 @@ body {
     margin: 0;
     padding: 0;
     font-family: "Noto Sans TC", sans-serif;
-    background-color: #f4f4f4;
+    background-color: #f3f3f3;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -12,7 +12,7 @@ body {
 /* 頁面標題 */
 .weather-title {
     margin-top: 40px;
-    font-size: 36px;
+    font-size: 40px;
     font-weight: bold;
     text-align: center;
     color: transparent;
@@ -137,6 +137,7 @@ body {
         opacity: 1;
         transform: none;
         max-height: none;
+        padding-bottom: 15px;
     }
 
     .burger {
@@ -147,11 +148,15 @@ body {
 
 /* 360~599px 手機版 navbar設定 */
 @media screen and (min-width: 360px) and (max-width: 599px) {
+    .weather-title {
+        margin-bottom: 0px;
+    }
+
     .navbar {
         position: relative;
         flex-direction: column;
         gap: 12px;
-        margin-top: 20px;
+        margin-top: 0px;
         padding-top: 50px;
         width: 100%;
         box-sizing: border-box;
@@ -288,7 +293,7 @@ body {
 }
 
 
-/* 右下角雲朵查詢按鈕 */
+/* 右下角放大鏡查詢按鈕 */
 .weather-float-btn {
     position: fixed;
     bottom: 30px;
@@ -361,7 +366,7 @@ body {
 
 .weather-float-btn:hover {
     transform: scale(1.1);
-    box-shadow: 0 0 25px rgba(85, 85, 255, 0.7);
+    box-shadow: 0 0 25px rgba(135, 203, 255, 0.3);
 }
 
 /* 呼吸發光動畫 */
@@ -378,36 +383,37 @@ body {
 }
 
 
-
-
 /* 地圖外框 */
 .map-container svg path {
     fill: #a5c9ea;
-    /* 柔和淡藍 */
     stroke: #ffffff;
-    /* 白色邊線 */
     stroke-width: 0.5;
     transition: fill 0.3s, transform 0.3s, filter 0.3s;
 }
 
 .map-container {
-    margin-top: 40px;
+    margin-top: 10px;
     width: 80%;
     max-width: 800px;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
-    /* ✨iOS滑動優化 */
     padding-bottom: 20px;
+    border: 1px solid #c6d9f1;
+    /* 輕微卡片化 */
+    border-radius: 12px;
+    background-color: #f3f3f3;
+    box-shadow: 0 1px 4px rgba(66, 132, 255, 0.446);
+    margin-bottom: 10px;
 }
 
-/* 讓 SVG 地圖滿版且置中 */
+/* 讓 SVG 地圖滿版置中 */
 .map-container svg {
     width: 100%;
     height: auto;
     display: block;
 }
 
-/* 滑鼠 hover 變亮、微微放大、有一點陰影 */
+/* 滑鼠 hover 變亮、微微放大、陰影 */
 .map-container svg path:hover {
     fill: #5b9bd5;
     transform: scale(1.001);
@@ -431,4 +437,211 @@ footer {
     padding: 40px 0px;
     font-size: 16px;
     margin-top: auto;
+}
+
+
+/* SVG 離島縮放調整 */
+#TWKIN,
+#TWLIE,
+#TWPEN {
+    transform: scale(1.6);
+    transform-origin: center;
+    transform-box: fill-box;
+    transition: transform 0.4s ease;
+}
+
+/* hover 放大（2.2 倍） */
+#TWKIN:hover,
+#TWLIE:hover,
+#TWPEN:hover {
+    transform: scale(2.2);
+    filter: drop-shadow(0 0 6px rgba(252, 252, 252, 0.3));
+}
+
+
+/* 提示框特效 */
+#tooltip {
+    position: absolute;
+    display: block;
+    opacity: 0;
+    visibility: hidden;
+    padding: 10px 14px;
+    background-color: #ffffff;
+    color: #333;
+    border: 1px solid #c6d9f1;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.15);
+    font-size: 14px;
+    line-height: 1.5;
+    z-index: 999;
+    white-space: nowrap;
+    pointer-events: none;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+    font-weight: 450;
+}
+
+#tooltip strong {
+    font-size: 15px;
+    color: #5b9bd5;
+}
+
+#tooltip div {
+    margin-top: 6px;
+    font-size: 12px;
+    color: #666;
+}
+
+/* Search Box */
+#weatherSearchBox {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 320px;
+    padding: 20px 24px;
+    background: white;
+    border: 1px solid #c6d9f1;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.15);
+    font-size: 15px;
+    font-family: inherit;
+    color: #333;
+    line-height: 1.6;
+    z-index: 1000;
+    opacity: 0;
+    transform: translate(-50%, -40%);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    /* 互動與顯示控制 */
+    pointer-events: none;
+    visibility: hidden;
+}
+
+#weatherSearchBox.show {
+    visibility: visible;
+    opacity: 1;
+    transform: translate(-50%, -50%);
+    pointer-events: auto;
+}
+
+#weatherSearchBox:not(.show) {
+    pointer-events: none;
+}
+
+
+#resultBox {
+    font-weight: 500;
+}
+
+.result-title {
+    color: #5b9bd5;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.update-time {
+    text-align: right;
+    font-size: 13px;
+    color: #a4a4a4;
+    margin-top: 8px;
+}
+
+/* Loading 動畫*/
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.result-animate {
+    animation: fadeInUp 0.4s ease;
+}
+
+.dots-loader {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 10px;
+}
+
+.dots-loader span {
+    width: 10px;
+    height: 10px;
+    background: #5b9bd5;
+    border-radius: 50%;
+    animation: blink 1s infinite ease-in-out;
+}
+
+.dots-loader span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.dots-loader span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes blink {
+
+    0%,
+    80%,
+    100% {
+        opacity: 0.2;
+        transform: scale(1);
+    }
+
+    40% {
+        opacity: 1;
+        transform: scale(1.4);
+    }
+}
+
+/* 下拉選單 */
+#weatherSearchBox select,
+#weatherSearchBox button {
+    margin-top: 8px;
+    padding: 6px 10px;
+    font-size: 14px;
+    border-radius: 6px;
+    border: 1px solid #c6d9f1;
+    background-color: #f8f9fc;
+    cursor: pointer;
+}
+
+/* 關閉按鈕 */
+.close-btn {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    font-size: 20px;
+    border: none;
+    background: transparent;
+    color: #888;
+    cursor: pointer;
+}
+
+/* 地圖提示文字 */
+.map-hint {
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.95);
+    color: #5b9bd5;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+    z-index: 999;
+}
+
+.map-hint.show {
+    opacity: 1;
 }
