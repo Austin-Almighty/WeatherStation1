@@ -26,23 +26,26 @@ async function renderInfo(city) {
     today_card_image.forEach((img, i) => {
         switch (overview[i]) {
             case "多雲時晴":
-                img.src="./assets/icons/cloud.svg"
+                img.src="/info/assets/icons/clouds.svg"
                 break;
             case "晴時多雲":
-                img.src="./assets/icons/cloudy sun.svg"
+                img.src="/info/assets/icons/cloudy sun.svg"
                 break;
             case "多雲短暫陣雨":
-                img.src="./assets/icons/shower.svg"
+                img.src="/info/assets/icons/shower.svg"
                 break;
             case "陰短暫陣雨":
-                img.src="./assets/icons/umbrella.svg"
+                img.src="/info/assets/icons/umbrella.svg"
                 break;
             case "陰時多雲短暫陣雨":
-                img.src="./assets/icons/shower.svg"
+                img.src="/info/assets/icons/shower.svg"
                 break;
             case "多雲":
-                img.src="./assets/icons/clouds.svg"
+                img.src="/info/assets/icons/cloudy sun.svg"
                 break;
+            default:
+              img.src="/info/assets/icons/hot.svg"
+              break;
         }
     })
     
@@ -113,17 +116,17 @@ async function getRainCounty(city) {
   updateTime.textContent = time;
   const randomPhoto = document.getElementById("randomPhoto");
   const list = [
-    "./assets/img/cloudy afternoon.jpg",
-    "./assets/img/cloudy day.jpg",
-    "./assets/img/fog.jpg",
-    "./assets/img/ivan-ulamec-F-kdP4Hk7lg-unsplash.jpg",
-    "./assets/img/rain windown.jpg",
-    "./assets/img/rain.jpg",
-    "./assets/img/rainy night.jpg",
-    "./assets/img/sun glasses.jpg",
-    "./assets/img/sunny day.jpg",
-    "./assets/img/sunny with cloud overcast.jpg",
-    "./assets/img/thunder.jpg",
+    "/info/assets/img/cloudy afternoon.jpg",
+    "/info/assets/img/cloudy day.jpg",
+    "/info/assets/img/fog.jpg",
+    "/info/assets/img/ivan-ulamec-F-kdP4Hk7lg-unsplash.jpg",
+    "/info/assets/img/rain windown.jpg",
+    "/info/assets/img/rain.jpg",
+    "/info/assets/img/rainy night.jpg",
+    "/info/assets/img/sun glasses.jpg",
+    "/info/assets/img/sunny day.jpg",
+    "/info/assets/img/sunny with cloud overcast.jpg",
+    "/info/assets/img/thunder.jpg",
   ];
   const randomIndex = Math.floor(Math.random() * list.length);
   const selectedImage = list[randomIndex];
@@ -226,6 +229,6 @@ async function getCurrent(city) {
   
 
 
-renderInfo("新北市")
-getRainCounty("新北市")
+renderInfo(city)
+getRainCounty(city)
 

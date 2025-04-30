@@ -5,7 +5,9 @@ from fastapi.staticfiles import StaticFiles
 app = FastAPI()
 
 # Serve static files from the current folder (frontend)
-app.mount("/static", StaticFiles(directory="homepage"), name="static")
+app.mount("/homepage", StaticFiles(directory="homepage"), name="homepage")
+app.mount("/info", StaticFiles(directory="info"), name="info")
+
 
 
 
