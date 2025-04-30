@@ -1,5 +1,8 @@
 let KEY = "CWA-A67F62A2-EBCB-41D7-B9F6-59F2310F45FB";
 
+const params = new URLSearchParams(window.location.search);
+const city = params.get("city");
+
 async function getForecast() {
     let ID = "F-C0032-001";
     let URL = `https://opendata.cwa.gov.tw/api/v1/rest/datastore/${ID}?Authorization=${KEY}&format=JSON`;
@@ -35,23 +38,9 @@ async function getForecast() {
       let copy = JSON.parse(tmp);
       result[name] = copy;
     }
-    console.log(result["臺北市"])
     return result;
   }
 
-
-
-async function getCurrent() {
-    let ID = "0-A003-001";
-    let URL = `https://opendata.cwa.gov.tw/api/v1/rest/datastore/${ID}?Authorization=${KEY}`;
-    let res = await fetch(URL);
-    let resData = await res.json();
-    // let locations = resData.records.location;
-    console.log(resData);
-    // console.log(resData.records.location[0])
-}
-
-getCurrent();
 
 async function renderInfo(city) {
     let result = await getForecast();
@@ -60,9 +49,10 @@ async function renderInfo(city) {
         div.textContent = city;
     });
     let weatherInfo = result[city];
+    console.log(weatherInfo)
+    
     let overview = weatherInfo.Wx;
-    const overview_div = document.getElementById('overview');
-    overview_div.textContent = overview;
+   
     const today_card_image = document.querySelectorAll(".today-img");
     today_card_image.forEach((img, i) => {
         switch (overview[i]) {
@@ -111,9 +101,17 @@ async function renderInfo(city) {
         }
     });
 
+    let today = await getCurrent(city);
+    const today_weather = document.getElementById('today-overview');
+
+    today_weather.textContent = today[0];
+    const today_temp = document.getElementById("today-temperature");
+
+    today_temp.textContent = today[1];
+
 }
 
-renderInfo("臺北市");
+
 
 
 
@@ -138,4 +136,103 @@ async function getRainCounty() {
     }
     return result;
   }
+
+
+  
+async function getCurrent(city) {
+    let ID = "0-A003-001";
+    let station = "";
+    switch (city) {
+      case "臺北市":
+        station = "臺北	";
+        break;
+      case "台北市":
+        station = "臺北	";
+        break;
+      case "基隆市":
+        station = "基隆";
+        break;
+      case "新北市":
+        station = "新北";
+        break;
+      case "連江縣":
+        station = "馬祖";
+        break;
+      case "宜蘭縣":
+        station = "宜蘭";
+        break;
+      case "新竹市":
+        station = "新竹市東區";
+        break;
+      case "新竹縣":
+        station = "新竹";
+        break;
+      case "桃園市":
+        station = "新屋";
+        break;
+      case "苗栗縣":
+        station = "後龍";
+        break;
+      case "台中市":
+        station = "臺中";
+        break;
+      case "臺中市":
+        station = "臺中";
+        break;
+      case "彰化縣":
+        station = "田中";
+        break;
+      case "南投縣":
+        station = "埔里";
+        break;
+      case "嘉義市":
+        station = "嘉義";
+        break;
+      case "嘉義縣":
+        station = "中埔	";
+        break;
+      case "雲林縣":
+        station = "古坑";
+        break;
+      case "台南市":
+        station = "臺南";
+        break;
+      case "臺南市":
+        station = "臺南";
+        break;
+      case "高雄市":
+        station = "高雄";
+        break;
+      case "澎湖縣":
+        station = "澎湖";
+        break;
+      case "金門縣":
+        station = "金門";
+        break;
+      case "屏東縣":
+        station = "恆春";
+        break;
+      case "台東縣":
+        station = "成功";
+        break;  
+      case "臺東縣":
+        station = "成功";
+        break;  
+      case "花蓮縣":
+        station = "花蓮";
+        break;
+    }
+    let URL = `https://opendata.cwa.gov.tw/api/v1/rest/datastore/O-A0003-001?Authorization=${KEY}&format=JSON&StationName=${station}&WeatherElement=Weather,AirTemperature&GeoInfo=CountyName`;
+    let res = await fetch(URL);
+    let resData = await res.json();
+    let weather = resData.records.Station[0].WeatherElement.Weather;
+    let temp = resData.records.Station[0].WeatherElement.AirTemperature;
+    console.log([weather, temp])
+    return [weather, temp]
+  }
+  
+  getCurrent("臺南市");
+
+renderInfo("臺南市");
+
 

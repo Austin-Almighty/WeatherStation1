@@ -49,6 +49,35 @@ function updateTime() {
     const minutes = now.getMinutes().toString().padStart(2, '0');
     const seconds = now.getSeconds().toString().padStart(2, '0');
     document.getElementById('time-now').textContent = `${hours}:${minutes}:${seconds}`;
+    const weekdays = document.querySelectorAll(".weekday");
+    weekdays.forEach((div, i) => {
+        let now = day + i;
+        let today = "日";
+        switch (now) {
+            case 0:
+                today = "日"; 
+                break
+            case 1:
+                today = "一";
+                break
+            case 2:
+                today = "二";
+                break
+            case 3:
+                today = "三";
+                break
+            case 4:
+                today = "四";
+                break
+            case 5:
+                today = "五";
+                break
+            case 6:
+                today = "六";
+                break
+        }
+        div.textContent = today;
+    })
 }
 updateTime();
 setInterval(updateTime, 1000);
