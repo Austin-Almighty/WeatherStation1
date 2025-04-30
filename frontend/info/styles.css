@@ -3,7 +3,7 @@
     padding: 0;
     box-sizing: border-box;
     font-family: "Noto Sans TC", sans-serif;
-    animation: page-load 2000ms ease-in-out;
+    animation: page-load 1500ms ease-in;
   }
 
   @keyframes page-load {
@@ -273,11 +273,11 @@ p {
 }
 
 .box-1, .box-2 {
-  animation: loading-move1 3000ms ease-in 1000ms;
+  animation: loading-move1 3000ms ease-out 1000ms;
 }
 
 .box-3 {
-  animation: loading-move2 3000ms ease-in 1000ms;
+  animation: loading-move2 3000ms ease-out 1000ms;
 }
 
 

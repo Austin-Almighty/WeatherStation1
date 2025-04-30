@@ -63,5 +63,12 @@ async function getRainCounty() {
     return result;
   }
 
+async function getForecastCounty(county) {
+  let response = await fetch(`https://opendata.cwa.gov.tw/api/v1/rest/datastore/F-D0047-091?Authorization=${KEY}&limit=5&offset=0&format=JSON&LocationName=${county}&ElementName=%E5%B9%B3%E5%9D%87%E6%BA%AB%E5%BA%A6,%E5%A4%A9%E6%B0%A3%E7%8F%BE%E8%B1%A1&sort=time`)
+  if (response.ok) {
+    let result = await response.json()
+    console.log(result.records)
+  }
+}
 
-getRainCounty();
+getForecastCounty("新北市")
