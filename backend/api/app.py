@@ -3,33 +3,29 @@ load_dotenv()
 
 
 from fastapi import *
-import urllib.request as req
-import urllib.parse
-import json, ssl, os
-context = ssl._create_unverified_context()
+import os, requests
 app = FastAPI()
 
 
 @app.get("/forecast")
-async def get_raining(response: Response):
+async def get_raining(response:Response):
   response.headers.append("Access-Control-Allow-Origin", "*")
   ID = "F-C0032-001"
   KEY = os.getenv("KEY")
   URL = f"https://opendata.cwa.gov.tw/api/v1/rest/datastore/{ID}?Authorization={KEY}"
-  # context = ssl._create_unverified_context()
-  with req.urlopen(URL, context=context) as res:
-    resData = json.load(res)
+  res = requests.get(URL)
+  resData = res.json()
   records = resData["records"]
   locations = records["location"];
   result = {}
   for i in range(len(locations)):
     name = locations[i]["locationName"]
-    weather = locations[i]["weatherElement"]
+    weathers = locations[i]["weatherElement"]
     forecast = {}
     interval = []
-    for j in range(len(weather)):
-      element = weather[j]["elementName"]
-      time = weather[j]["time"]
+    for j in range(len(weathers)):
+      element = weathers[j]["elementName"]
+      time = weathers[j]["time"]
       param = []
       for k in range(len(time)):
         if len(interval) < 3:
@@ -44,24 +40,20 @@ async def get_raining(response: Response):
     ]
     forecast.pop("MinT")
     forecast.pop("MaxT")
-    tmp = json.dumps(forecast)
-    copy = json.loads(tmp)
-    result[name] = copy
+    result[name] = forecast
   return result
 
 
 @app.get("/obs-county")
-async def get_obs_county(response: Response):
+async def get_obs_county(response:Response):
   response.headers.append("Access-Control-Allow-Origin", "*")
   ID = "O-A0003-001"
   KEY = os.getenv("KEY")
   StationName = ["基隆", "臺北", "新北", "中央大學", "國一N094K", "新竹", "苗栗農改", "臺中", "田中", "日月潭", "古坑", "嘉義", "嘉義分場", "臺南", "高雄", "屏東", "宜蘭", "花蓮", "臺東", "澎湖", "金門", "馬祖"]
   StationName = ",".join(StationName)
-  StationName = urllib.parse.quote(StationName)
   URL = f"https://opendata.cwa.gov.tw/api/v1/rest/datastore/{ID}?Authorization={KEY}&StationName={StationName}"
-  # context = ssl._create_unverified_context()
-  with req.urlopen(URL, context=context) as res:
-    resData = json.load(res)
+  res = requests.get(URL)
+  resData = res.json()
   records = resData["records"]
   stations = records["Station"]
   result = {}
@@ -78,7 +70,7 @@ async def get_obs_county(response: Response):
   for i in range(len(stations)):
     county = stations[i]["GeoInfo"]["CountyName"]
     name = stations[i]["StationName"]
-    result[county]["name"] = name;
+    result[county]["name"] = name
     result[county]["time"] = stations[i]["ObsTime"]["DateTime"][5:16]
     result[county]["temp"] = stations[i]["WeatherElement"]["AirTemperature"]
     result[county]["humidity"] = stations[i]["WeatherElement"]["RelativeHumidity"]
@@ -93,9 +85,8 @@ async def get_obs_town(response:Response, q:str|None=None):
   ID = "O-A0003-001"
   KEY = os.getenv("KEY")
   URL = f"https://opendata.cwa.gov.tw/api/v1/rest/datastore/{ID}?Authorization={KEY}"
-  # context = ssl._create_unverified_context()
-  with req.urlopen(URL, context=context) as res:
-    resData = json.load(res)
+  res = requests.get(URL)
+  resData = res.json()
   records = resData["records"]
   stations = records["Station"]
   result = {}
