@@ -87,6 +87,7 @@ async function renderInfo(city) {
     let today = await getCurrent(city);
     const today_weather = document.getElementById('today-overview');
     const value = Number(today[0]);
+    console.log(value)
     today_weather.textContent = !isNaN(value) && value >= 0 ? today[0] : "-";
     const today_temp = document.getElementById("today-temperature");
     today_temp.textContent = today[1];
@@ -101,7 +102,6 @@ async function renderInfo(city) {
 async function getRainCounty(city) {
   let response = await fetch("http://54.66.212.32:8000/obs-county");
   let result = await response.json();
-  console.log(result);
   let display_info = result[city];
   console.log(display_info);
   let humidity = display_info.humidity;
@@ -231,8 +231,7 @@ async function getCurrent(city) {
   
 
 
-renderInfo(city)
-getRainCounty(city)
+
 
 
 
@@ -338,4 +337,6 @@ async function getForecastCounty(county) {
 
 }
 
-getForecastCounty("新北市")
+renderInfo(city);
+getRainCounty(city);
+getForecastCounty(city);
