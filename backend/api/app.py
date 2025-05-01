@@ -80,6 +80,18 @@ async def get_obs_county(response:Response, q:str|None=None):
     result[county]["humidity"] = station["WeatherElement"]["RelativeHumidity"]
     result[county]["weather"] = station["WeatherElement"]["Weather"]
     result[county]["rain"] = station["WeatherElement"]["Now"]["Precipitation"]
+  def replace_negatives(d):
+    for key, value in d.items():
+      if isinstance(value, dict):
+        replace_negatives(value)
+      else:
+        try:
+          if float(value) < 0:
+            d[key] = "-"
+        except:
+          continue
+    return d
+  result = replace_negatives(result)
   if q in CountyName:
     return result[q]
   return result
