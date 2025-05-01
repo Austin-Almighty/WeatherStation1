@@ -1,1 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>台灣天氣資訊網站</title>
+    <link rel="stylesheet" href="/info/styles.css" />
+    <!-- <link rel="stylesheet" href="styles.css" /> -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap" rel="stylesheet">
+</head>
+
+
+<body>
+    <nav>
+        <h2 class="homepage"><a href="/">台灣天氣資訊網站</a></h2>
+        <!-- <div class="search-box">
+            <input type="text" placeholder="輸入縣市" />
+            <button>Search</button>
+        </div> -->
+    </nav>
+    <main>
+        <div class="grid-container">
+            <div class="time-zone box-1">
+                <section class="current-weather">
+                    <h1>現在時間</h1>
+                    <h2 id="time-now"></h2>
+                    <h2 id="date">日期</h2>
+                    <div class="weather-details">
+                        <h3 class="city"></h3>
+                        <img src="/info/assets/icons/hot.svg" alt="Weather Icon" id="today-icon"/>
+                        <div>
+                            <p><span id="today-temperature"></span>°C</p>
+                            <p id="today-overview"></p>
+                        </div>
+                    </div>
+                    <div class="precipitation">
+                        <h3>濕度：<span class="humidity"></span>%</h3>
+                        <h3>累積雨量：<span class="rainfall"></span>mm</h3>
+                    </div>
+                </section>
+                <section class="today-forecast">
+                    <h1>30小時氣象預測</h1>
+                    <div class="today-cards">
+                        <div class="today-card">
+                            <h4 class="forecast-time">今日白天</h4>
+                            <img src="/info/assets/icons/sun rise.svg" alt="weather icon" class="today-img">
+                            <p class="temp"></p>
+                            <p>降雨機率：<span class="rain"></span>%</p>
+                            <p class="feel"></p>
+                        </div>
+                        <div class="today-card">
+                            <h4 class="forecast-time">今晚明晨</h4>
+                            <img src="/info/assets/icons/sun rise.svg" alt="weather icon" class="today-img">
+                            <p class="temp"></p>
+                            <p>降雨機率：<span class="rain"></span>%</p>
+                            <p class="feel"></p>
+                        </div>
+                        <div class="today-card">
+                            <h4 class="forecast-time">明日白天</h4>
+                            <img src="/info/assets/icons/sun rise.svg" alt="weather icon" class="today-img">
+                            <p class="temp"></p>
+                            <p>降雨機率：<span class="rain"></span>%</p>
+                            <p class="feel"></p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div class="app-container box-2">
+                <header>
+                    <h1 class="city"></h1>
+                </header>
+                <div>
+                    <section class="forecast">
+                        <h2>未來五日預測</h2>
+                        <div class="forecast-cards">
+                            <div class="card">
+                                <p class="weekday">Mon</p>
+                                <img src="/info/assets/icons/cloudy sun.svg" alt="Weather Icon" class="card-weather"/>
+                                <p><span class="card-temp">22</span>°C</p>
+                            </div>
+                            <div class="card">
+                                <p class="weekday">Mon</p>
+                                <img src="/info/assets/icons/cloudy sun.svg" alt="Weather Icon" class="card-weather"/>
+                                <p><span class="card-temp">22</span>°C</p>
+                            </div>
+                            <div class="card">
+                                <p class="weekday">Mon</p>
+                                <img src="/info/assets/icons/cloudy sun.svg" alt="Weather Icon" class="card-weather"/>
+                                <p><span class="card-temp">22</span>°C</p>
+                            </div>
+                            <div class="card">
+                                <p class="weekday">Mon</p>
+                                <img src="/info/assets/icons/cloudy sun.svg" alt="Weather Icon" class="card-weather"/>
+                                <p><span class="card-temp">22</span>°C</p>
+                            </div>
+                            <div class="card">
+                                <p class="weekday">Mon</p>
+                                <img src="/info/assets/icons/cloudy sun.svg" alt="Weather Icon" class="card-weather"/>
+                                <p><span class="card-temp">22</span>°C</p>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <div class="app-container box-3">
+                <div>
+                    <section class="station">
+                        <h1>資料來源</h1>
+                        <h3><span id="stationName"></span>觀測站</h3>
+                        <img id="randomPhoto">
+                        <h6>資料更新時間：<span id="updateTime"></span></h6>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <div>© 2025 台灣天氣資訊網站. 資料來源：中央氣象署公開資料. All rights reserved.</div>
+    </footer>
+</body>
+<script src="/info/scripts.js"></script>
+<script src="/info/feature.js"></script>
+<!-- <script src="scripts.js"></script>
+<script src="feature.js"></script> -->
+
+</html>
