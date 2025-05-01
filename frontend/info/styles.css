@@ -94,11 +94,7 @@ main {
   max-width: 1200px;
 }
 
-@media (max-width: 768px) {
-  .grid-container {
-    grid-template-columns: 1fr;
-  }
-}
+
 
 
 .app-container {
@@ -204,6 +200,8 @@ header {
   width: 33%;
   text-align: center;
 }
+
+
 
 .weather-details {
   display: flex;
@@ -332,14 +330,35 @@ footer {
 }
 
 
+@media (max-width: 768px) {
+  .grid-container {
+    grid-template-columns: 1fr;
+  }
+
+  .precipitation {
+    justify-content: center;
+  }
+
+  .today-forecast {
+    text-align: center;
+  }
+}
+
 
 
 
 @media (max-width: 767px) {
+  .grid-container {
+    justify-content: center;
+  }
   .time-zone {
     align-items: center;
     width: 100%;
     padding: 1em;
+  }
+
+  .app-container {
+    width: 100%;
   }
 
   .current-weather {
@@ -351,5 +370,31 @@ footer {
     align-items: center;
     text-align: center;
     justify-content: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .today-cards {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .today-card {
+    min-width: 90%;
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    font-size: small;
+    padding: 0;
+
+    img {
+      width: 90%;
+      height: auto;
+      min-width: 24px;
+    }
   }
 }
