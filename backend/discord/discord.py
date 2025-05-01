@@ -1,9 +1,9 @@
-from fastapi import APIRouter, Request, Body
 import requests
 from datetime import datetime, timezone, timedelta
 from dotenv import load_dotenv
 import os
-import json
+from apscheduler.schedulers.blocking import BlockingScheduler
+from apscheduler.triggers.cron import CronTrigger
 
 load_dotenv()
 
@@ -12,6 +12,8 @@ ID = os.getenv("API_ID")
 KEY = os.getenv("API_KEY")
 
 TW_TZ = datetime.now(timezone(timedelta(hours=8)))
+scheduler = BlockingScheduler(timezone=TW_TZ)
+
 
 class CityWeatherInfo:
     def __init__(self, city: str, weather: str, ci: str, rain: str, temperature: str):
@@ -24,8 +26,8 @@ class CityWeatherInfo:
 
     def to_embed_field(self):
         return {
-            "name": f"**{self.city}**",
-            "value": f"天氣：\n{self.weather} {self.ci}\n{self.temperature}\n{self.rain}",
+            "name": f"{self.city}",
+            "value": f"天氣：\n{self.weather} {self.ci}\n{self.temperature}\n{self.rain}\n[{self.city}詳細天氣預報](http://52.35.40.79:8000/info?city={self.city})",
             "inline": True
         }
 
@@ -80,13 +82,13 @@ class DiscordMessage:
             period = "明天白天的"
 
         self.embed = {
-            "title": f"{period}天氣預報",
+            "title": f"{TW_TZ.date()} {period}天氣預報",
             # "description": f"{TW_TZ.date()} 六都{period}的天氣預報，其餘縣市資訊請[點我]({self.url})或標題了解更多。",
-            "description": f"以下為六都{period}的天氣預報。",
+            "description": f"以下為六都{period}的天氣預報，[其他縣市請點我](http://52.35.40.79:8000/)。",
             # "url": self.url,
             "color": 11038012,
             "timestamp": self.timestamp,
-            "thumbnail": {"url": "https://uxwing.com/wp-content/themes/uxwing/download/nature-and-environment/weather-icon.png"},
+            "thumbnail": {"url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjtFq3c4REV1FsM-hXO_v72jW3-8DWm8amy8DcK2vgAKvCkoUO5NPqvyC8Wnz6fpJvCpscQIC1sSCWwwZ87wQyw6iiYt0EYE0ad4Bvhsh9IRPSE90oEw8UvLhgNs-SL0uSzjMv9i63Nt_l3/s400/job_otenki_oneesan.png"},
             "fields": [city.to_embed_field() for city in self.cities]
         }
 
@@ -96,6 +98,7 @@ class DiscordMessage:
             "content": self.content,
             "embeds": [self.embed]
         }
+
 
 def fetch_weather_data():
 
@@ -122,13 +125,13 @@ def fetch_weather_data():
                 "weather": f"{weather[0]["time"][0]["parameter"]["parameterName"]}",
                 "ci": f"{weather[3]["time"][0]["parameter"]["parameterName"]}",
                 "rain": f"降雨機率：{weather[1]["time"][0]["parameter"]["parameterName"]}%",
-                "temperature": f"氣溫：{weather[2]["time"][0]["parameter"]["parameterName"]} ~ {weather[4]["time"][0]["parameter"]["parameterName"]}C"
+                "temperature": f"氣溫：{weather[2]["time"][0]["parameter"]["parameterName"]} ~ {weather[4]["time"][0]["parameter"]["parameterName"]}°C"
             },
             "night": {
                 "weather": f"{weather[0]["time"][1]["parameter"]["parameterName"]}",
                 "ci": f"{weather[3]["time"][1]["parameter"]["parameterName"]}",
                 "rain": f"降雨機率：{weather[1]["time"][1]["parameter"]["parameterName"]}%",
-                "temperature": f"氣溫：{weather[2]["time"][1]["parameter"]["parameterName"]} ~ {weather[4]["time"][1]["parameter"]["parameterName"]}C"
+                "temperature": f"氣溫：{weather[2]["time"][1]["parameter"]["parameterName"]} ~ {weather[4]["time"][1]["parameter"]["parameterName"]}°C"
             },
         }
 
@@ -144,7 +147,6 @@ def fetch_weather_data():
     return weather_data_dict
 
 
-
 def post_message_to_discord(
         input_username:str, 
         message_data: dict):
@@ -153,7 +155,7 @@ def post_message_to_discord(
         username = input_username,
         taipei = CityWeatherInfo("臺北市", **message_data["臺北市"]),
         new_taipei=CityWeatherInfo("新北市", **message_data["新北市"]),
-        taoyuan=CityWeatherInfo("桃園市", **message_data["桃園市 "]),
+        taoyuan=CityWeatherInfo("桃園市", **message_data["桃園市"]),
         taichung=CityWeatherInfo("臺中市", **message_data["臺中市"]),
         tainan=CityWeatherInfo("臺南市", **message_data["臺南市"]),
         kaohsiung=CityWeatherInfo("高雄市", **message_data["高雄市"])
@@ -162,10 +164,14 @@ def post_message_to_discord(
     response = requests.post(WEBHOOK_URL, json=message.to_dict())
     return {"status_code": response.status_code, "response": response.text}
 
-weather_data = fetch_weather_data()
-print(weather_data)
+
+@scheduler.scheduled_job(CronTrigger(hour='7,16,22', minute=0))
+def main():
+    print(f"[{datetime.now(TW_TZ)}] 執行定時任務")
+    weather_data = fetch_weather_data()
+    input_username = "天氣預報機器人"
+    post_message_to_discord(input_username, weather_data)
 
 
-input_username = "Weather Bot"
-
-post_message_to_discord(input_username, weather_data)
+if __name__ == "__main__":
+    scheduler.start()
