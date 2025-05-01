@@ -83,11 +83,13 @@ class DiscordMessage:
 
         self.embed = {
             "title": f"{TW_TZ.date()} {period}天氣預報",
-            # "description": f"{TW_TZ.date()} 六都{period}的天氣預報，其餘縣市資訊請[點我]({self.url})或標題了解更多。",
             "description": f"以下為六都{period}的天氣預報，[其他縣市請點我](http://52.35.40.79:8000/)。",
-            # "url": self.url,
             "color": 11038012,
             "timestamp": self.timestamp,
+            "footer": {
+            "icon_url": "https://cdn.discordapp.com/embed/avatars/0.png",
+            "text": "ご覧の 中央氣象署 の提供でお送りします。"
+            },
             "thumbnail": {"url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjtFq3c4REV1FsM-hXO_v72jW3-8DWm8amy8DcK2vgAKvCkoUO5NPqvyC8Wnz6fpJvCpscQIC1sSCWwwZ87wQyw6iiYt0EYE0ad4Bvhsh9IRPSE90oEw8UvLhgNs-SL0uSzjMv9i63Nt_l3/s400/job_otenki_oneesan.png"},
             "fields": [city.to_embed_field() for city in self.cities]
         }
@@ -167,7 +169,7 @@ def post_message_to_discord(
 
 @scheduler.scheduled_job(CronTrigger(hour='7,16,22', minute=0))
 def main():
-    print(f"[{datetime.now(TW_TZ)}] 執行定時任務")
+    print(f"[{TW_TZ.isoformat()}] 執行定時任務")
     weather_data = fetch_weather_data()
     input_username = "天氣預報機器人"
     post_message_to_discord(input_username, weather_data)
