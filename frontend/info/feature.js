@@ -90,6 +90,7 @@ async function renderInfo(city) {
     const today_temp = document.getElementById("today-temperature");
     today_temp.textContent = today[1];
 
+
 }
 
 
@@ -232,3 +233,108 @@ async function getCurrent(city) {
 renderInfo(city)
 getRainCounty(city)
 
+
+
+async function getForecastCounty(county) {
+  let response = await fetch(
+    `https://opendata.cwa.gov.tw/api/v1/rest/datastore/F-D0047-091?Authorization=${KEY}&limit=4&offset=0&format=JSON&LocationName=${county}&ElementName=%E5%B9%B3%E5%9D%87%E6%BA%AB%E5%BA%A6,%E5%A4%A9%E6%B0%A3%E7%8F%BE%E8%B1%A1&sort=time`
+  );
+  if (response.ok) {
+    let result = await response.json();
+
+    let temp_list =
+      result.records.Locations[0].Location[0].WeatherElement[0].Time;
+    const selectedTemperatures = temp_list
+      .filter((_, index) => index % 2 === 1) 
+      .map((entry) => entry.ElementValue[0].Temperature);
+
+    console.log(temp_list[0][0])
+    let weather_list =
+      result.records.Locations[0].Location[0].WeatherElement[1].Time;
+    const weatherCodes = weather_list
+      .filter((_, index) => index % 2 === 1)
+      .map((item) => item.ElementValue?.[0]?.WeatherCode ?? "N/A");
+
+    const cards = document.querySelectorAll(".card-temp");
+    cards.forEach((div, i) => {
+      div.textContent = selectedTemperatures[i]
+    })
+
+    const weather_card = document.querySelectorAll(".card-weather");
+    weather_card.forEach((div, i) => {
+      switch (weatherCodes[i]) {
+        case "01":
+          div.src = "/info/assets/icons/sunny day.svg";
+          break;
+        case "02":
+          div.src = "/info/assets/icons/cloudy sun.svg";
+          break;
+        case "03":
+          div.src = "/info/assets/icons/clouds.svg";
+          break;
+        case "04":
+          div.src = "/info/assets/icons/clouds.svg";
+          break;
+        case "05":
+          div.src = "/info/assets/icons/clouds.svg";
+          break;
+        case "06":
+          div.src = "/info/assets/icons/clouds.svg";
+          break;
+        case "07":
+          div.src = "/info/assets/icons/clouds.svg";
+          break;
+        case "07":
+          div.src = "/info/assets/icons/clouds.svg";
+          break;
+        case "08":
+          div.src = "/info/assets/icons/shower.svg";
+          break;
+        case "09":
+          div.src = "/info/assets/icons/shower.svg";
+          break;
+        case "10":
+          div.src = "/info/assets/icons/shower.svg";
+          break;
+        case "11":
+          div.src = "/info/assets/icons/rain.svg";
+          break;
+        case "12":
+          div.src = "/info/assets/icons/rain.svg";
+          break;
+        case "13":
+          div.src = "/info/assets/icons/rain.svg";
+          break;
+        case "14":
+          div.src = "/info/assets/icons/rain.svg";
+          break;
+        case "15":
+          div.src = "/info/assets/icons/umbrella.svg";
+          break;
+        case "16":
+          div.src = "/info/assets/icons/umbrella.svg";
+          break;
+        case "17":
+          div.src = "/info/assets/icons/umbrella.svg";
+          break;
+        case "18":
+          div.src = "/info/assets/icons/shower.svg";
+          break;
+        case "19":
+          div.src = "/info/assets/icons/umbrella.svg";
+          break;
+        case "20":
+          div.src = "/info/assets/icons/umbrella.svg";
+          break;
+        default:
+          div.src = "/info/assets/icons/sunny day.svg";
+          break;
+      }
+    })
+    
+    
+  }
+
+}
+
+getForecastCounty("新北市")

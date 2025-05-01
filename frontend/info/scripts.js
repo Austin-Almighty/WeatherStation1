@@ -10,7 +10,6 @@ const hours = current_time.getHours().toString().padStart(2, "0");
 const minutes = current_time.getMinutes().toString().padStart(2, "0");
 const seconds = current_time.getSeconds().toString().padStart(2, "0");
 
-console.log(day);
 
 let weekday = "日";
 switch (day) {
@@ -51,9 +50,9 @@ function updateTime() {
     document.getElementById('time-now').textContent = `${hours}:${minutes}:${seconds}`;
     const weekdays = document.querySelectorAll(".weekday");
     weekdays.forEach((div, i) => {
-        let now = day + i;
+        let start = (day + i) % 7;
         let today = "日";
-        switch (now) {
+        switch (start) {
             case 0:
                 today = "日"; 
                 break
