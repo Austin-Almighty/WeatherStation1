@@ -60,6 +60,7 @@ async function fetchWeatherData() {
             const cityId = area.getAttribute('id');  // ex. TWTPE
             const cityName = cityMap[cityId];
 
+            // 滑鼠移至 SVG MAP 提示框
             area.addEventListener('mousemove', (e) => {
                 if (cityName && data[cityName]) {
                     const info = data[cityName];
@@ -76,12 +77,12 @@ async function fetchWeatherData() {
                     tooltip.style.visibility = 'visible';
                 }
             });
-
+            // 滑鼠離開 SVG MAP 提示框隱藏
             area.addEventListener("mouseleave", () => {
                 tooltip.style.opacity = '0';
                 tooltip.style.visibility = 'hidden';
             });
-
+            // 綁定點擊事件（cityName 對應 /info?city= )
             area.addEventListener("click", () => {
                 if (cityName) {
                     window.location.href = `/info?city=${encodeURIComponent(cityName)}`;

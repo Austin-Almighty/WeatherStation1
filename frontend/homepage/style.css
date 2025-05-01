@@ -24,6 +24,11 @@ body {
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.15);
 }
 
+.weather-title-link {
+    text-decoration: none;
+    color: inherit;
+}
+
 
 /* Navbar 設定 */
 
@@ -696,4 +701,78 @@ footer {
     border-radius: 6px;
     cursor: pointer;
     font-size: 14px;
+}
+
+/* coming-soon.html*/
+
+.coming-container {
+    max-width: 480px;
+    margin: 120px auto;
+    padding: 40px 24px;
+    background: #f3f3f3;
+    text-align: center;
+    font-family: inherit;
+}
+
+.coming-container h2 {
+    font-size: 24px;
+    color: #5b9bd5;
+    margin-bottom: 16px;
+}
+
+.coming-container p {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 24px;
+}
+
+.back-home-btn {
+    padding: 10px 20px;
+    font-size: 15px;
+    background-color: #5b9bd5;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+}
+
+.back-home-btn:hover {
+    background-color: #417bbd;
+}
+
+.dot-loading span {
+    opacity: 0;
+    animation: loadingDots 2.4s infinite;
+    display: inline-block;
+    font-weight: bold;
+}
+
+.dot-loading span:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.dot-loading span:nth-child(2) {
+    animation-delay: 0.4s;
+}
+
+.dot-loading span:nth-child(3) {
+    animation-delay: 0.8s;
+}
+
+@keyframes loadingDots {
+
+    0%,
+    20% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
 }
