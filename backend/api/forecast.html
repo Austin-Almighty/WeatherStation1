@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    let KEY = "CWA-A67F62A2-EBCB-41D7-B9F6-59F2310F45FB";
+
+
+    getFore();
+    async function getFore() {
+      let ID = "F-C0032-001";
+      let URL = `https://opendata.cwa.gov.tw/api/v1/rest/datastore/${ID}?Authorization=${KEY}`;
+      let res = await fetch(URL);
+      let resData = await res.json();
+      let records = resData.records;
+      let locations = records.location;
+      let result = {}
+      for (let i = 0; i < locations.length; i++) {
+        let name = locations[i].locationName;
+        let weather = locations[i].weatherElement;
+        let forecast = {};
+        let interval = [];
+        for (let j = 0; j < weather.length; j++) {
+          let element = weather[j].elementName;
+          let time = weather[j].time;
+          let param = [];
+          for (let k = 0; k < time.length; k++) {
+            interval[k] = time[k].startTime.slice(5, 16) + " ~ " + time[k].endTime.slice(5, 16);
+            param[k] = time[k].parameter.parameterName;
+          }
+          forecast[element] = param;
+        }
+        forecast.Intv = interval;
+        forecast.Temp = [
+          forecast.MinT[0] + " ~ " + forecast.MaxT[0],
+          forecast.MinT[1] + " ~ " + forecast.MaxT[1],
+          forecast.MinT[2] + " ~ " + forecast.MaxT[2]
+        ]
+        delete forecast.MinT;
+        delete forecast.MaxT;
+        let tmp = JSON.stringify(forecast);
+        let copy = JSON.parse(tmp);
+        result[name] = copy;
+      }
+      return result;
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="/backend/api/data.js"></script>
+  <script>
+    // getRainCounty().then(result => { console.log(result) });
+    // getRainTown().then(result => { console.log(result) });
+    // getForecast().then(result => { console.log(result) });
+    // getObsCounty().then(result => { console.log(result) });
+    // getObsTown().then(result => { console.log(result) });
+    getData();
+    async function getData() {
+      let res = await fetch("http://127.0.0.1:8000/obs-town");
+      let resData = await res.json();
+      console.log(resData);
+    }
+  </script>
+</head>
+
+<body>
+
+</body>
+
+</html>
