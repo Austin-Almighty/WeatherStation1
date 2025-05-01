@@ -84,13 +84,12 @@ async function renderInfo(city) {
         }
     });
 
-    let today = await getCurrent(city);
-    const today_weather = document.getElementById('today-overview');
-
-    const value = Number(today[0]);
-    today_weather.textContent = (!isNaN(value) && value >= 0) ? today[0] : "-";
-    const today_temp = document.getElementById("today-temperature");
-    today_temp.textContent = today[1];
+    // let today = await getCurrent(city);
+    // const today_weather = document.getElementById('today-overview');
+    // const value = Number(today[0]);
+    // today_weather.textContent = (!isNaN(value) && value >= 0) ? today[0] : "-";
+    // const today_temp = document.getElementById("today-temperature");
+    // today_temp.textContent = today[1];
 
 
 }
@@ -103,7 +102,6 @@ async function getRainCounty(city) {
   let response = await fetch("http://54.66.212.32:8000/obs-county");
   let result = await response.json();
   let display_info = result[city];
-  console.log(display_info);
   let humidity = display_info.humidity;
   let rain = display_info.rain;
   const humidityElements = document.querySelector(".humidity");
@@ -244,7 +242,7 @@ async function getCurrent(city) {
       } catch {
         temp = "-";
       }
-  
+      console.log(weather, temp)
       return [weather, temp];
   
     } catch (error) {
@@ -254,9 +252,18 @@ async function getCurrent(city) {
   }
   
 
+async function getCurrentCity(city) {
+  let response = await fetch("http://54.66.212.32:8000/obs-county");
+  let data = await response.json();
+  let cityData = data[city];
+  console.log(cityData);
+  const today_weather = document.getElementById('today-overview');
+  today_weather.textContent = cityData.weather;
+  const today_temp = document.getElementById("today-temperature");
+  today_temp.textContent = cityData.temp;
+}
 
-
-
+getCurrentCity(city);
 
 
 async function getForecastCounty(county) {
