@@ -1,19 +1,16 @@
 import requests
-from datetime import datetime, timezone, timedelta
-from dotenv import load_dotenv
+from datetime import datetime
 import os
 from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.triggers.cron import CronTrigger
 from zoneinfo import ZoneInfo
+from dotenv import load_dotenv
 
 load_dotenv()
 
 WEBHOOK_URL = os.getenv("WEBHOOK_URL")
 ID = os.getenv("API_ID")
 KEY = os.getenv("API_KEY")
-
-tz = timezone(timedelta(hours=8))  # 台灣時區 UTC+8
-TW_TZ = datetime.now(tz)
 
 taipei_zone = ZoneInfo("Asia/Taipei")
 
@@ -83,7 +80,7 @@ class DiscordMessage:
             period = "明天白天的"
 
         self.embed = {
-            "title": f"{TW_TZ.date()} {period}天氣預報",
+            "title": f"{now.date()} {period}天氣預報",
             "description": f"以下為六都{period}的天氣預報，[其他縣市請點我](http://52.35.40.79:8000/)。",
             "color": 11038012,
             "timestamp": self.timestamp,
@@ -109,7 +106,6 @@ def fetch_weather_data(current_time: datetime):
     response = requests.get(url)
     dict_data = response.json()
     result = dict_data["records"]["location"]
-    print(f"現在時間：{TW_TZ}")
     weather_data_dict = {}
     for city in result:
         city_name = city["locationName"]
@@ -177,12 +173,10 @@ def main():
     input_username = "天氣預報機器人"
     post_message_to_discord(input_username, weather_data, current_time)
 
-# # 設定排程（每天三個時間點）
-# scheduler.add_job(main, CronTrigger(hour=7, minute=0))
-# scheduler.add_job(main, CronTrigger(hour=16, minute=0))
-# scheduler.add_job(main, CronTrigger(hour=18, minute=0))
-# scheduler.add_job(main, CronTrigger(hour=19, minute=0))
-scheduler.add_job(main, CronTrigger(hour=20, minute=55))
+# 設定排程（每天三個時間點）
+scheduler.add_job(main, CronTrigger(hour=7, minute=0, timezone=taipei_zone))
+scheduler.add_job(main, CronTrigger(hour=16, minute=0, timezone=taipei_zone))
+scheduler.add_job(main, CronTrigger(hour=22, minute=0, timezone=taipei_zone))
 
 
 if __name__ == "__main__":
