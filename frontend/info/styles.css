@@ -29,10 +29,13 @@ p {
   font-weight: 700;
 }
 
+.homepage {
+  transition: transform 0.3s ease;
+}
+
 .homepage:hover {
   transform: scale(1.1);
 }
-
 nav {
   display: flex;
   justify-content: space-around;
