@@ -8,7 +8,7 @@
 
 a {
   text-decoration: none;
-  color: inherit;
+  color: transparent;
 }
 
 @keyframes page-load {
@@ -29,13 +29,13 @@ p {
   font-weight: 700;
 }
 
-.homepage {
-  transition: transform 0.3s ease;
+
+
+.homepage a:hover {
+  color: transparent;
+  text-shadow: 0 0 5px rgba(79, 172, 254, 0.6), 0 0 10px rgba(5, 104, 184, 0.4);
 }
 
-.homepage:hover {
-  transform: scale(1.1);
-}
 nav {
   display: flex;
   justify-content: space-around;
