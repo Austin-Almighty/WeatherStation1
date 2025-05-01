@@ -17,3 +17,11 @@
 - 根據天氣不同，展示對應的圖示
 - 顯示本地現在時間
 - 建立FastAPI server
+
+
+### 👤 邱景銘（傳送訊息至 Discord）
+- Fetch API 資料並且整理資料型態
+- 整理欲發送之訊息格式，使用 embed 樣式
+- 欲發送之訊息包含前端網址 url 之超連結
+- 使用 webhook 傳送訊息至 Discord 特定頻道
+- 將寫好之 Python file 發送至 server，每日定時預報天氣資訊
