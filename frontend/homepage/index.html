@@ -20,7 +20,7 @@
         </div>
 
         <div class="navbar-menu" id="navbarMenu">
-            <button onclick="location.href='../info/info.html'">氣象預報</button>
+            <button onclick="location.href='/info?city=臺北市'">氣象預報</button>
             <button onclick="location.href='observation.html'">天氣觀測</button>
             <button onclick="location.href='earthquake.html'">地震海嘯</button>
             <button onclick="location.href='climate.html'">氣候</button>
@@ -31,6 +31,7 @@
     </nav>
     <!-- 台灣地圖 SVG -->
     <div class="map-container">
+        <div id="mapHint" class="map-hint">🌈 滑一下看看全台天氣如何？</div>
         <!-- tw.svg 內容 -->
         <svg baseprofile="tiny" fill="#6f9c76" height="1000" stroke="#ffffff" stroke-linecap="round"
             stroke-linejoin="round" stroke-width=".5" version="1.2" viewbox="0 0 1000 1000" width="1000"
@@ -181,7 +182,6 @@
                 </circle>
             </g>
         </svg>
-        <div id="mapHint" class="map-hint">🌈 滑一下看看全台天氣如何？</div>
     </div>
 
     <!-- 右下角放大鏡查詢按鈕 -->
@@ -224,6 +224,12 @@
         <!-- 搜尋結果 -->
         <div id="resultBox" style="margin-top: 16px;"></div>
     </div>
+    <!-- 縣市選擇提醒視窗 -->
+    <div id="customAlert" class="custom-alert">
+        <p>📍 請選擇一個縣市</p>
+        <button onclick="closeCustomAlert()">知道了</button>
+    </div>
+
     <!-- Footer -->
     <footer>
         <div>© 2025 台灣天氣資訊網站. 資料來源：中央氣象署公開資料. All rights reserved.</div>
