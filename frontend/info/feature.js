@@ -52,8 +52,8 @@ async function renderInfo(city) {
     let timeframe = weatherInfo.Intv;
     const intervalElements = document.querySelectorAll(".forecast-time");
     timeframe.forEach((frame, i) => {
-      const startTime = frame.slice(6, 11); // e.g., "00:00"
-      const endTime = frame.slice(-5); // e.g., "06:00"
+      const startTime = frame.slice(6, 11); 
+      const endTime = frame.slice(-5); 
       const timeInterval = `${startTime}~${endTime}`;
 
       if (intervalElements[i]) {
@@ -86,9 +86,9 @@ async function renderInfo(city) {
 
     let today = await getCurrent(city);
     const today_weather = document.getElementById('today-overview');
+
     const value = Number(today[0]);
-    console.log(value)
-    today_weather.textContent = !isNaN(value) && value >= 0 ? today[0] : "-";
+    today_weather.textContent = (!isNaN(value) && value >= 0) ? today[0] : "-";
     const today_temp = document.getElementById("today-temperature");
     today_temp.textContent = today[1];
 
@@ -221,12 +221,36 @@ async function getCurrent(city) {
         station = "花蓮";
         break;
     }
-    let URL = `https://opendata.cwa.gov.tw/api/v1/rest/datastore/O-A0003-001?Authorization=${KEY}&format=JSON&StationName=${station}&WeatherElement=Weather,AirTemperature&GeoInfo=CountyName`;
-    let res = await fetch(URL);
-    let resData = await res.json();
-    let weather = resData.records.Station[0].WeatherElement.Weather;
-    let temp = resData.records.Station[0].WeatherElement.AirTemperature;
-    return [weather, temp]
+   
+    try {
+      let URL = `https://opendata.cwa.gov.tw/api/v1/rest/datastore/O-A0003-001?Authorization=${KEY}&format=JSON&StationName=${station}&WeatherElement=Weather,AirTemperature&GeoInfo=CountyName`;
+      let res = await fetch(URL);
+  
+      if (!res.ok) {
+        throw new Error(`Network response was not ok: ${res.status}`);
+      }
+  
+      let resData = await res.json();
+      let weather, temp;
+  
+      try {
+        weather = resData.records.Station[0].WeatherElement.Weather;
+      } catch {
+        weather = "-";
+      }
+  
+      try {
+        temp = resData.records.Station[0].WeatherElement.AirTemperature;
+      } catch {
+        temp = "-";
+      }
+  
+      return [weather, temp];
+  
+    } catch (error) {
+      console.error("Failed to fetch weather data:", error);
+      return ["-", "-"];
+    }
   }
   
 
@@ -248,7 +272,7 @@ async function getForecastCounty(county) {
       .filter((_, index) => index % 2 === 1) 
       .map((entry) => entry.ElementValue[0].Temperature);
 
-    console.log(temp_list[0][0])
+
     let weather_list =
       result.records.Locations[0].Location[0].WeatherElement[1].Time;
     const weatherCodes = weather_list
