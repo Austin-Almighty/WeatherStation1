@@ -75,8 +75,20 @@ async function fetchWeatherData() {
                     tooltip.style.left = (e.pageX + 15) + 'px';
                     tooltip.style.opacity = '1';
                     tooltip.style.visibility = 'visible';
+
+                    //  防止 tooltip 超出手機螢幕（360px~599px）
+                    if (window.innerWidth <= 599) {
+                        const tooltipRect = tooltip.getBoundingClientRect();
+                        if (e.pageX + 15 + tooltipRect.width > window.innerWidth) {
+                            tooltip.style.left = (window.innerWidth - tooltipRect.width - 10) + 'px';
+                        }
+                        if (e.pageY + 15 + tooltipRect.height > window.innerHeight) {
+                            tooltip.style.top = (window.innerHeight - tooltipRect.height - 10) + 'px';
+                        }
+                    }
                 }
             });
+
             // 滑鼠離開 SVG MAP 提示框隱藏
             area.addEventListener("mouseleave", () => {
                 tooltip.style.opacity = '0';
