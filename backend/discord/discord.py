@@ -24,8 +24,8 @@ class CityWeatherInfo:
 
     def to_embed_field(self):
         return {
-            "name": self.city,
-            "value": f"{self.weather}\n{self.ci}\n{self.rain}\n{self.temperature}",
+            "name": f"**{self.city}**",
+            "value": f"天氣：\n{self.weather} {self.ci}\n{self.temperature}\n{self.rain}",
             "inline": True
         }
 
@@ -72,21 +72,21 @@ class DiscordMessage:
         self.timestamp = TW_TZ.isoformat()
 
         hour = TW_TZ.hour
-        if 6 <= hour < 18:
-            period = "白天"
+        if 6 <= hour < 16:
+            period = "今天白天的"
+        elif 16 <= hour < 22:
+            period = "稍後晚上的"
         else:
-            period = "晚上"
+            period = "明天白天的"
 
         self.embed = {
-            "title": f"{TW_TZ.date()} {period}天氣預報",
+            "title": f"{period}天氣預報",
             # "description": f"{TW_TZ.date()} 六都{period}的天氣預報，其餘縣市資訊請[點我]({self.url})或標題了解更多。",
-            "description": f"{TW_TZ.date()} 六都{period}的天氣預報。",
+            "description": f"以下為六都{period}的天氣預報。",
             # "url": self.url,
             "color": 11038012,
             "timestamp": self.timestamp,
-            "thumbnail": {
-                "url": "https://static.cdnlogo.com/logos/w/44/weather-ios.svg"
-            },
+            "thumbnail": {"url": "https://uxwing.com/wp-content/themes/uxwing/download/nature-and-environment/weather-icon.png"},
             "fields": [city.to_embed_field() for city in self.cities]
         }
 
@@ -119,21 +119,21 @@ def fetch_weather_data():
 
         weather_info = {
             "morning": {
-                "weather": f"天氣：{weather[0]["time"][0]["parameter"]["parameterName"]}",
-                "ci": f"舒適度：{weather[3]["time"][0]["parameter"]["parameterName"]}",
+                "weather": f"{weather[0]["time"][0]["parameter"]["parameterName"]}",
+                "ci": f"{weather[3]["time"][0]["parameter"]["parameterName"]}",
                 "rain": f"降雨機率：{weather[1]["time"][0]["parameter"]["parameterName"]}%",
                 "temperature": f"氣溫：{weather[2]["time"][0]["parameter"]["parameterName"]} ~ {weather[4]["time"][0]["parameter"]["parameterName"]}C"
             },
             "night": {
-                "weather": f"天氣：{weather[0]["time"][1]["parameter"]["parameterName"]}",
-                "ci": f"舒適度：{weather[3]["time"][1]["parameter"]["parameterName"]}",
+                "weather": f"{weather[0]["time"][1]["parameter"]["parameterName"]}",
+                "ci": f"{weather[3]["time"][1]["parameter"]["parameterName"]}",
                 "rain": f"降雨機率：{weather[1]["time"][1]["parameter"]["parameterName"]}%",
                 "temperature": f"氣溫：{weather[2]["time"][1]["parameter"]["parameterName"]} ~ {weather[4]["time"][1]["parameter"]["parameterName"]}C"
             },
         }
 
         hour = TW_TZ.hour
-        if 6 <= hour < 18:
+        if 6 <= hour < 16:
             weather_data_dict[city_name] = weather_info["morning"]
             
         else:
@@ -153,7 +153,7 @@ def post_message_to_discord(
         username = input_username,
         taipei = CityWeatherInfo("臺北市", **message_data["臺北市"]),
         new_taipei=CityWeatherInfo("新北市", **message_data["新北市"]),
-        taoyuan=CityWeatherInfo("新北市", **message_data["新北市"]),
+        taoyuan=CityWeatherInfo("桃園市", **message_data["桃園市 "]),
         taichung=CityWeatherInfo("臺中市", **message_data["臺中市"]),
         tainan=CityWeatherInfo("臺南市", **message_data["臺南市"]),
         kaohsiung=CityWeatherInfo("高雄市", **message_data["高雄市"])
@@ -167,6 +167,5 @@ print(weather_data)
 
 
 input_username = "Weather Bot"
-# input_title = f"{TW_TZ.date} {period} 天氣預報"
 
 post_message_to_discord(input_username, weather_data)
