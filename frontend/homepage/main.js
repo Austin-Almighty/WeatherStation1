@@ -154,7 +154,7 @@ async function searchWeather() {
             <p>天氣：${info.weather}${emoji}</p>
             <p>氣溫：${info.temp}°C</p>
             <p>濕度：${info.humidity}％</p>
-            <p>降雨率：${info.rain}％</p>
+            <p>雨量：${info.rain}％</p>
             <p class="update-time">更新時間：${updateTime}</p>
           `;
             resultBox.classList.add("result-animate");
