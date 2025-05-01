@@ -26,42 +26,41 @@ function getWeatherEmoji(description) {
 
 // 串接縣市天氣資料 API
 let cityWeatherData = {};
+const cityMap = {
+    TWTPE: "臺北市",
+    TWTXG: "臺中市",
+    TWKHH: "高雄市",
+    TWTNN: "臺南市",
+    TWNWT: "新北市",
+    TWHUA: "花蓮縣",
+    TWILA: "宜蘭縣",
+    TWTTT: "臺東縣",
+    TWPIF: "屏東縣",
+    TWCHA: "彰化縣",
+    TWYUN: "雲林縣",
+    TWMIA: "苗栗縣",
+    TWCYQ: "嘉義縣",
+    TWCYI: "嘉義市",
+    TWHSQ: "新竹縣",
+    TWHSZ: "新竹市",
+    TWKEE: "基隆市",
+    TWTAO: "桃園市",
+    TWNAN: "南投縣",
+    TWKIN: "金門縣",
+    TWLIE: "連江縣",
+    TWPEN: "澎湖縣"
+};
 async function fetchWeatherData() {
     try {
         const response = await fetch("http://54.66.212.32:8000/forecast");
         const data = await response.json();
-        console.log("後端資料：", data);
 
         // 監聽 SVG 地圖的 path
         document.querySelectorAll('svg path').forEach(area => {
-            area.addEventListener('mousemove', (e) => {
-                const cityId = area.getAttribute('id'); // ex. TWTPE
-                const cityMap = {
-                    TWTPE: "臺北市",
-                    TWTXG: "臺中市",
-                    TWKHH: "高雄市",
-                    TWTNN: "臺南市",
-                    TWNWT: "新北市",
-                    TWHUA: "花蓮縣",
-                    TWILA: "宜蘭縣",
-                    TWTTT: "臺東縣",
-                    TWPIF: "屏東縣",
-                    TWCHA: "彰化縣",
-                    TWYUN: "雲林縣",
-                    TWMIA: "苗栗縣",
-                    TWCYQ: "嘉義縣",
-                    TWCYI: "嘉義市",
-                    TWHSQ: "新竹縣",
-                    TWHSZ: "新竹市",
-                    TWKEE: "基隆市",
-                    TWTAO: "桃園市",
-                    TWNAN: "南投縣",
-                    TWKIN: "金門縣",
-                    TWLIE: "連江縣",
-                    TWPEN: "澎湖縣"
-                };
-                const cityName = cityMap[cityId];
+            const cityId = area.getAttribute('id');  // ex. TWTPE
+            const cityName = cityMap[cityId];
 
+            area.addEventListener('mousemove', (e) => {
                 if (cityName && data[cityName]) {
                     const info = data[cityName];
                     const emoji = getWeatherEmoji(info.Wx[0]);
@@ -78,9 +77,16 @@ async function fetchWeatherData() {
                 }
             });
 
-            area.addEventListener('mouseleave', () => {
+            area.addEventListener("mouseleave", () => {
                 tooltip.style.opacity = '0';
                 tooltip.style.visibility = 'hidden';
+            });
+
+            area.addEventListener("click", () => {
+                if (cityName) {
+                    window.location.href = `/info?city=${encodeURIComponent(cityName)}`;
+                    console.log(cityName)
+                }
             });
         });
 
@@ -122,8 +128,10 @@ function toggleSearchBox() {
 async function searchWeather() {
     const city = document.getElementById("cityselect").value;
     const resultBox = document.getElementById("resultBox");
-    if (!city) return alert("請選擇一個縣市");
-
+    if (!city) {
+        showCustomAlert();
+        return;
+    }
     // loading 動畫
     resultBox.innerHTML = `
       <div class="dots-loader">
@@ -179,5 +187,18 @@ window.addEventListener("load", () => {
         hint.classList.remove("show");
     }, 3000);
 });
+
+// 縣市選擇提醒視窗函式
+function showCustomAlert() {
+    const alertBox = document.getElementById("customAlert");
+    alertBox.classList.add("show");
+}
+
+function closeCustomAlert() {
+    const alertBox = document.getElementById("customAlert");
+    alertBox.classList.remove("show");
+}
+
+
 
 
