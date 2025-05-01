@@ -3,7 +3,7 @@
   padding: 0;
   box-sizing: border-box;
   font-family: "Noto Sans TC", sans-serif;
-  animation: page-load 1000ms ease-in;
+  animation: page-load 1500ms ease-in;
 }
 
 a {
