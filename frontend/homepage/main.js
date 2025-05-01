@@ -10,7 +10,8 @@ const weatherEmojis = [
     { keywords: ["多雲時晴"], emoji: "🌥️" },
     { keywords: ["晴時多雲"], emoji: "🌤️" },
     { keywords: ["多雲"], emoji: "⛅" },
-    { keywords: ["晴"], emoji: "☀️" }
+    { keywords: ["晴"], emoji: "☀️" },
+    { keywords: ["靄"], emoji: "🌫️" },
 ];
 
 // 取得 天氣對應 emoji 函式
@@ -159,11 +160,12 @@ async function searchWeather() {
         const data = await res.json();
         const info = data[city];
         const updateTime = info.time.split("T")[1];
+        const weatherText = info.weather === "-99" ? "暫無天氣資訊" : info.weather;
         const emoji = getWeatherEmoji(info.weather);
         if (info) {
             resultBox.innerHTML = `
             <h4 class="result-title">${city}</h4>
-            <p>天氣：${info.weather}${emoji}</p>
+            <p>天氣：${weatherText}${emoji}</p>
             <p>氣溫：${info.temp}°C</p>
             <p>濕度：${info.humidity}％</p>
             <p>雨量：${info.rain}mm</p>
