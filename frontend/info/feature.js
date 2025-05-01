@@ -86,7 +86,8 @@ async function renderInfo(city) {
 
     let today = await getCurrent(city);
     const today_weather = document.getElementById('today-overview');
-    today_weather.textContent = Number(today[0]) >= 0 ? today[0] : "-";
+    const value = Number(today[0]);
+    today_weather.textContent = !isNaN(value) && value >= 0 ? today[0] : "-";
     const today_temp = document.getElementById("today-temperature");
     today_temp.textContent = today[1];
 
