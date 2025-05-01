@@ -146,7 +146,7 @@ body {
 }
 
 
-/* 360~599px 手機版 navbar設定 */
+/* 360~599px 手機版 設定 */
 @media screen and (min-width: 360px) and (max-width: 599px) {
     .weather-title {
         margin-bottom: 0px;
@@ -215,6 +215,11 @@ body {
         transform: rotate(360deg);
     }
 
+    #weatherSearchBox {
+        width: 90vw;
+        max-width: 320px;
+        box-sizing: border-box;
+    }
 }
 
 /* 按鈕逐一淡入滑入動畫效果 */
@@ -392,6 +397,7 @@ body {
 }
 
 .map-container {
+    position: relative;
     margin-top: 10px;
     width: 80%;
     max-width: 800px;
@@ -626,7 +632,7 @@ footer {
 /* 地圖提示文字 */
 .map-hint {
     position: absolute;
-    top: 35%;
+    top: 5%;
     left: 50%;
     transform: translateX(-50%);
     background: rgba(255, 255, 255, 0.95);
@@ -640,8 +646,54 @@ footer {
     pointer-events: none;
     transition: opacity 0.4s ease;
     z-index: 999;
+    white-space: nowrap;
 }
 
 .map-hint.show {
     opacity: 1;
+}
+
+/* 縣市選擇提醒視窗(Alert) */
+.custom-alert {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 350px;
+    padding: 20px;
+    background: white;
+    border: 1px solid #c6d9f1;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.15);
+    transform: translate(-50%, -50%) scale(0.95);
+    z-index: 1100;
+    text-align: center;
+    font-size: 16px;
+    color: #333;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+/* 顯示時的狀態 */
+.custom-alert.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, -50%) scale(1);
+    pointer-events: auto;
+}
+
+.custom-alert p {
+    margin-bottom: 16px;
+    font-weight: 500;
+}
+
+.custom-alert button {
+    padding: 6px 14px;
+    border: none;
+    background: #5b9bd5;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
 }
