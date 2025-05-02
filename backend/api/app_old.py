@@ -1,8 +1,10 @@
-from fastapi import FastAPI, Response
 from dotenv import load_dotenv
-import os, requests, time
+import os, requests
 load_dotenv()
 KEY = os.getenv("KEY")
+
+
+from fastapi import FastAPI, Response
 app = FastAPI()
 
 
@@ -10,22 +12,13 @@ CountyName = ["基隆市", "臺北市", "新北市", "桃園市", "新竹市", "
 StationName = ["基隆", "臺北", "新北", "中央大學", "國一N094K", "新竹", "苗栗農改", "臺中", "田中", "日月潭", "古坑", "嘉義", "嘉義分場", "臺南", "高雄", "屏東", "宜蘭", "花蓮", "臺東", "澎湖", "金門", "馬祖"]
 
 
-forecast_cache = {
-  "data": None,
-  "timestamp": 0
-}
-FORECAST_TTL = 600
-obs_county_cache = {
-  "data": None,
-  "timestamp": 0
-}
-OBS_COUNTY_TTL = 600
-
-
-def fetch_forecast_data():
-  print("fetch forecast data!")
+@app.get("/forecast")
+async def get_forecast(response:Response, q:str|None=None):
+  response.headers.append("Access-Control-Allow-Origin", "*")
   ID = "F-C0032-001"
   url = f"https://opendata.cwa.gov.tw/api/v1/rest/datastore/{ID}?Authorization={KEY}"
+  if q in CountyName:
+    url += f"&locationName={q}"
   res = requests.get(url)
   resData = res.json()
   records = resData["records"]
@@ -57,8 +50,11 @@ def fetch_forecast_data():
     forecast.pop("MaxT")
     result[name] = forecast
   return result
-def fetch_obs_county_data():
-  print("fetch obs_county data!")
+
+
+@app.get("/obs-county")
+async def get_obs_county(response:Response, q:str|None=None):
+  response.headers.append("Access-Control-Allow-Origin", "*")
   ID = "O-A0003-001"
   url = f"https://opendata.cwa.gov.tw/api/v1/rest/datastore/{ID}?Authorization={KEY}&StationName={",".join(StationName)}"
   res = requests.get(url)
@@ -96,37 +92,9 @@ def fetch_obs_county_data():
           continue
     return d
   result = replace_negatives(result)
+  if q in CountyName:
+    return result[q]
   return result
-
-
-def update_forecast_cache():
-  forecast_cache["data"] = fetch_forecast_data()
-  forecast_cache["timestamp"] = time.time()
-def update_obs_county_cache():
-  obs_county_cache["data"] = fetch_obs_county_data()
-  obs_county_cache["timestamp"] = time.time()
-
-
-@app.get("/forecast")
-async def get_forecast(response:Response, q:str|None=None):
-  response.headers.append("Access-Control-Allow-Origin", "*")
-  now = time.time()
-  if now - forecast_cache["timestamp"] > FORECAST_TTL:
-    update_forecast_cache()
-  if q in CountyName:
-    return forecast_cache["data"][q]
-  return forecast_cache["data"]
-
-
-@app.get("/obs-county")
-async def get_obs_county(response:Response, q:str|None=None):
-  response.headers.append("Access-Control-Allow-Origin", "*")
-  now = time.time()
-  if now - obs_county_cache["timestamp"] > OBS_COUNTY_TTL:
-    update_obs_county_cache()
-  if q in CountyName:
-    return obs_county_cache["data"][q]
-  return obs_county_cache["data"]
 
 
 @app.get("/obs-town")
