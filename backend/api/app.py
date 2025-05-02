@@ -22,11 +22,10 @@ obs_county_cache = {
 OBS_COUNTY_TTL = 600
 
 
-def fetch_forecast_data(q:str|None=None):
+def fetch_forecast_data():
+  print("fetch forecast data!")
   ID = "F-C0032-001"
   url = f"https://opendata.cwa.gov.tw/api/v1/rest/datastore/{ID}?Authorization={KEY}"
-  if q in CountyName:
-    url += f"&locationName={q}"
   res = requests.get(url)
   resData = res.json()
   records = resData["records"]
@@ -57,9 +56,9 @@ def fetch_forecast_data(q:str|None=None):
     forecast.pop("MinT")
     forecast.pop("MaxT")
     result[name] = forecast
-  print("fetched!")
   return result
-def fetch_obs_county_data(q:str|None=None):
+def fetch_obs_county_data():
+  print("fetch obs_county data!")
   ID = "O-A0003-001"
   url = f"https://opendata.cwa.gov.tw/api/v1/rest/datastore/{ID}?Authorization={KEY}&StationName={",".join(StationName)}"
   res = requests.get(url)
@@ -97,17 +96,14 @@ def fetch_obs_county_data(q:str|None=None):
           continue
     return d
   result = replace_negatives(result)
-  print("fetched!")
-  if q in CountyName:
-    return result[q]
   return result
 
 
-def update_forecast_cache(q:str|None=None):
-  forecast_cache["data"] = fetch_forecast_data(q)
+def update_forecast_cache():
+  forecast_cache["data"] = fetch_forecast_data()
   forecast_cache["timestamp"] = time.time()
-def update_obs_county_cache(q:str|None=None):
-  obs_county_cache["data"] = fetch_obs_county_data(q)
+def update_obs_county_cache():
+  obs_county_cache["data"] = fetch_obs_county_data()
   obs_county_cache["timestamp"] = time.time()
 
 
@@ -115,8 +111,10 @@ def update_obs_county_cache(q:str|None=None):
 async def get_forecast(response:Response, q:str|None=None):
   response.headers.append("Access-Control-Allow-Origin", "*")
   now = time.time()
-  if not forecast_cache["data"] or now - forecast_cache["timestamp"] > FORECAST_TTL:
-    update_forecast_cache(q)
+  if now - forecast_cache["timestamp"] > FORECAST_TTL:
+    update_forecast_cache()
+  if q in CountyName:
+    return forecast_cache["data"][q]
   return forecast_cache["data"]
 
 
@@ -124,8 +122,10 @@ async def get_forecast(response:Response, q:str|None=None):
 async def get_obs_county(response:Response, q:str|None=None):
   response.headers.append("Access-Control-Allow-Origin", "*")
   now = time.time()
-  if not obs_county_cache["data"] or now - obs_county_cache["timestamp"] > OBS_COUNTY_TTL:
-    update_obs_county_cache(q)
+  if now - obs_county_cache["timestamp"] > OBS_COUNTY_TTL:
+    update_obs_county_cache()
+  if q in CountyName:
+    return obs_county_cache["data"][q]
   return obs_county_cache["data"]
 
 
